@@ -1,49 +1,108 @@
 <!doctype html>
-<!-- Temporary home page of shaulhatzav.co.il (23/11/2026). The full site replaces it later. The game lives at /alef-bet/ (its own repo). -->
 <html lang="he" dir="rtl">
 <head>
 <meta charset="utf-8">
 <meta property="og:image" content="https://shaulhatzav.co.il/img/share-sq.jpg">
 <meta property="og:image:width" content="500">
 <meta property="og:image:height" content="500">
-<meta property="og:title" content="שאול הצב 🐢 משחקים וסרטונים לילדים">
-<meta property="og:description" content="משחק אלף-בית חינמי לגילאי 3 עד 7. בלי פרסומות, בלי קניות, בלי הרשמה.">
+<meta property="og:title" content="שאול הצב | משחק אלף-בית חינמי וסרטונים לילדים">
+<meta property="og:description" content="שאול הצב: משחק אלף-בית חינמי וסרטונים חינוכיים בעברית לילדים בגילאי 3 עד 7. בלי פרסומות, בלי קניות, בלי הרשמה.">
 <meta property="og:url" content="https://shaulhatzav.co.il/">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>שאול הצב | משחק אלף-בית חינמי לילדים</title>
-<meta name="description" content="שאול הצב: משחק אלף-בית חינמי לילדים בגילאי 3 עד 7, וסרטונים חינוכיים ביוטיוב. בלי פרסומות, בלי קניות, בלי הרשמה.">
+<title>שאול הצב | משחק אלף-בית חינמי וסרטונים לילדים</title>
+<meta name="description" content="שאול הצב: משחק אלף-בית חינמי וסרטונים חינוכיים בעברית לילדים בגילאי 3 עד 7. בלי פרסומות, בלי קניות, בלי הרשמה.">
 <link rel="canonical" href="https://shaulhatzav.co.il/">
 <link rel="icon" href="img/shaul.png">
-<style>
-  * { box-sizing: border-box; }
-  html, body { margin: 0; min-height: 100%; }
-  body { font-family: "Rubik", "Heebo", "Segoe UI", Arial, sans-serif; color: #fff; background: #0b1530 url(img/forest-s.jpg) center / cover fixed; }
-  .shade { min-height: 100vh; background: linear-gradient(#0b1530e6, #0b153099 40%, #0b1530e6); display: flex; align-items: center; justify-content: center; padding: 24px 16px; }
-  main { width: 100%; max-width: 560px; text-align: center; }
-  img.shaul { width: min(46vw, 220px); height: auto; filter: drop-shadow(0 12px 22px rgba(0,0,0,.55)); }
-  h1 { margin: 8px 0 6px; font-size: clamp(2.2rem, 9vw, 3.4rem); font-weight: 900; color: #ffd84d; text-shadow: 0 4px 18px rgba(0,0,0,.6); }
-  p { margin: 0 auto 22px; font-size: clamp(1.05rem, 4.4vw, 1.3rem); line-height: 1.5; max-width: 30em; text-shadow: 0 2px 10px rgba(0,0,0,.7); }
-  a.btn { display: block; margin: 14px auto; padding: 18px 24px; border-radius: 999px; font-weight: 900; text-decoration: none; font-size: clamp(1.3rem, 5.6vw, 1.7rem); max-width: 420px; }
-  a.play { background: #ffd84d; color: #141a2e; box-shadow: 0 10px 28px rgba(0,0,0,.45), 0 0 50px #ffd84d66; }
-  a.yt { background: #ffffff; color: #141a2e; font-size: clamp(1.05rem, 4.6vw, 1.3rem); padding: 14px 22px; }
-  a.btn:hover { transform: translateY(-2px); }
-  a.btn:focus-visible { outline: 4px solid #fff; outline-offset: 4px; }
-  .small { margin-top: 22px; font-size: 1rem; color: #e8ecff; }
-  @media (prefers-reduced-motion: reduce) { a.btn:hover { transform: none; } }
-</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Rubik:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/site.css?v=2">
 </head>
 <body>
-<div class="shade">
-  <main>
-    <img class="shaul" src="img/shaul.png" alt="שאול הצב, צב ירוק עם משקפיים עגולים וצעיף אדום" width="313" height="398">
-    <h1>שאול הצב</h1>
-    <p>משחק אלף-בית חינמי לילדים בגילאי 3 עד 7.<br>מוצאים את כל האותיות, מא' ועד ת'.</p>
-    <a class="btn play" href="/alef-bet/">▶ שחקו עכשיו</a>
-    <a class="btn yt" href="https://www.youtube.com/channel/UC1-MnNsGyyjfJZPgiCrN3sg" rel="noopener">הסרטונים של שאול ביוטיוב</a>
-    <p class="small">חינם · בלי פרסומות · בלי קניות · בלי הרשמה<br>מתאים לטלפון וגם למחשב</p>
-  </main>
-</div>
+<a class="skip" href="#main">דלגו לתוכן</a>
+<header class="bar"><div class="b st">
+  <a class="logo" href="index.html"><img src="img/shaul.png" alt="" width="313" height="398">שאול הצב</a>
+  <nav aria-label="ראשי"><a href="alef-bet/">משחקים</a><a href="videos/">סרטונים</a><a href="gan/">לגננות</a><a href="#about">להורים</a></nav>
+  <details class="menu"><summary>תפריט</summary><div class="st"><a href="alef-bet/">משחקים</a><a href="videos/">סרטונים</a><a href="gan/">לגננות</a><a href="#about">להורים</a></div></details>
+  <a class="pill p" href="https://www.youtube.com/channel/UC1-MnNsGyyjfJZPgiCrN3sg?sub_confirmation=1" rel="noopener">הרשמה לערוץ</a>
+</div></header>
+<main id="main">
+
+<div class="hero" style="background-image:url(img/bg/clay-c.jpg)"><div class="in">
+  <div class="panel st">
+    <div class="new st">משחק חדש!</div>
+    <h1>אלף-בית<br><span>עם שאול הצב</span></h1>
+    <p>משחק חינמי לילדים בגילאי 3 עד 7. חמישה עולמות, וכל האותיות מא' ועד ת'.</p>
+    <div class="btns"><a class="pill y big" href="alef-bet/">▶ שחקו עכשיו</a><a class="pill" href="videos/">לצפות בפרקים</a></div>
+  </div>
+</div></div>
+<div class="rib" aria-hidden="true"><div class="ribbon">לומדים ★ משחקים ★ צוחקים ★ שאול הצב ★ לומדים ★ משחקים ★ צוחקים ★ שאול הצב ★ לומדים ★ משחקים</div></div>
+
+<section id="about" style="background-image:url(img/bg/milk-kitchen.jpg)"><div class="in side">
+  <div class="panel st">
+    <h2>להורים: מה יש כאן?</h2>
+    <p class="lead">הם מבקשים מסך. אז שיהיה מסך שנשאר מהם משהו.</p>
+    <p>שאול הוא צב סקרן שמגלה את העולם עם החברים שלו. סרטונים קצרים ומשחקים בעברית, לגילאי 3 עד 7. הכול חינם, בלי פרסומות, בלי קניות ובלי הרשמה.</p>
+    <a class="pill t" href="videos/#parents">למה כדאי להכיר את שאול</a>
+  </div>
+</div></section>
+
+<section class="plain" style="background-image:url(img/bg/winter.jpg)"><div class="in">
+  <h2 class="title st">מה חדש אצל שאול</h2>
+  <div class="grid">
+    <article class="card st"><a class="pic" href="alef-bet/" style="background-image:url(img/forest-s.jpg)" aria-label="משחק אלף-בית עם שאול הצב"></a>
+      <div class="ft"><span class="tag" style="background:var(--mint)">משחק</span><h3>אלף-בית עם שאול הצב</h3><a class="pill y" href="alef-bet/">שחקו עכשיו</a></div></article>
+    <article class="card st"><a class="pic" href="videos/#squishy" style="background-image:url(img/bg/squishy.jpg)" aria-label="למה הסקווישי חוזר?"><span aria-hidden="true">▶</span></a><div class="ft"><span class="tag" style="background:var(--pink)">פרק</span><h3>למה הסקווישי חוזר?</h3><a class="pill" href="videos/#squishy">צפו עכשיו</a></div></article>
+    <article class="card st"><a class="pic" href="videos/#milk" style="background-image:url(img/bg/milk-kitchen.jpg)" aria-label="מאיפה בא החלב?"><span aria-hidden="true">▶</span></a><div class="ft"><span class="tag" style="background:var(--sky)">פרק</span><h3>מאיפה בא החלב?</h3><a class="pill" href="videos/#milk">צפו עכשיו</a></div></article>
+  </div>
+  <div class="player st">
+    <h3>הפרק החדש: למה הסקווישי חוזר?</h3>
+    <div class="frame"><iframe src="https://www.youtube-nocookie.com/embed/lowUQMVtAIc?rel=0" title="למה הסקווישי חוזר?" loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+    <div class="row"><p>הסוד של הסקווישי: למה הוא חוזר לצורה שלו אחרי שלוחצים עליו.</p><a class="pill p" href="https://www.youtube.com/channel/UC1-MnNsGyyjfJZPgiCrN3sg?sub_confirmation=1" rel="noopener">הרשמה לערוץ ביוטיוב</a></div>
+  </div>
+</div></section>
+
+<section class="friends" style="background-image:url(img/bg/milk-farm.jpg)" role="img" aria-label="שאול, סבתא, השועל והארנב עומדים ליד פרה ברפת"><div class="in">
+  <h2 class="title st">הכירו את החברים</h2>
+  <p class="st">שאול, סבתא, השועל, הסנאי והארנב. בכל פרק הם לומדים משהו חדש.</p>
+</div></section>
+
+<section class="pocket plain" style="background-image:url(img/bg/hanukkah.jpg)"><div class="in">
+  <div class="panel st">
+    <div>
+      <h2>שאול בכיס שלכם</h2>
+      <p>המשחק נפתח ישר מהדפדפן, בלי חנות אפליקציות ובלי הורדה.</p>
+      <ol><li>סורקים את הקוד במצלמה של הטלפון</li><li>בתפריט הדפדפן בוחרים "הוספה למסך הבית"</li><li>שאול מחכה לכם על המסך</li></ol>
+      <a class="pill y" href="alef-bet/">לפתוח את המשחק</a>
+    </div>
+    <div class="qr st"><img src="img/qr-alef-bet.png" alt="קוד QR שפותח את משחק האלף-בית של שאול הצב" width="1080" height="1080" loading="lazy">סרקו אותי</div>
+  </div>
+</div></section>
+
+<section style="background-image:url(img/bg/clay-b.jpg)"><div class="in side l">
+  <div class="panel st">
+    <h2>לגננות ולמורות</h2>
+    <p class="lead">איך משחקים עם שאול בגן ובכיתה.</p>
+    <p>רעיונות קצרים לפעילות סביב כל אות, רשימת האותיות והמילים שבמשחק, ודף עם קוד לסריקה שאפשר לשלוח להורים.</p>
+    <a class="pill t" href="gan/">לדף הגננות</a>
+  </div>
+</div></section>
+
+</main>
+<footer><div class="in">
+  <div>
+    <a class="logo st" href="index.html">שאול הצב</a>
+    <nav aria-label="תחתון">
+      <a href="https://www.youtube.com/channel/UC1-MnNsGyyjfJZPgiCrN3sg" rel="noopener">הערוץ ביוטיוב</a>
+      <a href="privacy/">מדיניות פרטיות</a>
+      <a href="accessibility/">הצהרת נגישות</a>
+      <a href="mailto:shaul.hatzav@gmail.com">צרו קשר</a>
+    </nav>
+  </div>
+  <img class="s" src="img/shaul.png" alt="" width="313" height="398" loading="lazy">
+</div><div class="copy">חינם · בלי פרסומות · בלי הרשמה · לגילאי 3 עד 7</div></footer>
+<a class="a11y st" href="accessibility/" aria-label="הצהרת נגישות"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="4" r="2.2"/><path d="M4 8.2c2.6.8 5.3 1.2 8 1.2s5.4-.4 8-1.2l.5 1.9c-1.9.6-3.8 1-5.7 1.2v3.2l2.3 6.6-1.9.7L12.6 16h-1.2l-2.6 6.2-1.9-.7 2.3-6.6v-3.2c-1.9-.2-3.8-.6-5.7-1.2z"/></svg></a>
 </body>
 </html>
