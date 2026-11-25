@@ -38,7 +38,7 @@
     const fit = () => {
       const r = cv.getBoundingClientRect(), dpr = Math.min(2, devicePixelRatio || 1);
       cv.width = Math.round(r.width * dpr); cv.height = Math.round(r.height * dpr); gl.viewport(0, 0, cv.width, cv.height);
-      const phone = matchMedia('(max-width: 760px)').matches, px = phone ? .62 : .7, py = phone ? 0 : .5, Z = 1.05;   // a small zoom hides the edges
+      const phone = matchMedia('(max-width: 760px)').matches, px = phone ? .62 : .7, py = phone ? 0 : .5, Z = 1.1;   // a small zoom hides the edges
       let fx = 1, fy = 1; if (r.width / r.height > IA) fy = (r.height / r.width) * IA; else fx = (r.width / r.height) / IA;
       fx /= Z; fy /= Z; gl.uniform4f(uBox, fx, fy, (1 - fx) * px, (1 - fy) * Math.max(py, .025));
     };
@@ -46,8 +46,8 @@
     const draw = () => { gl.uniform2f(uOff, ox, oy); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4); };
     const tick = now => {
       if (!run) return;
-      const t = now / 1000, A = .016;
-      ox += ((Math.sin(t * .45) * .7 + mx) * A - ox) * .06; oy += ((Math.sin(t * .31) * .45 + my) * A * .7 - oy) * .06;
+      const t = now / 1000, A = .045;
+      ox += ((Math.sin(t * .55) * .8 + mx) * A - ox) * .07; oy += ((Math.sin(t * .37) * .6 + my) * A * .7 - oy) * .07;
       draw(); requestAnimationFrame(tick);
     };
     const update = () => { const go = seen && !document.hidden && !reduce.matches;
