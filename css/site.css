@@ -1,4 +1,4 @@
-﻿/* shaulhatzav.co.il — shared styles (23/11/2026).
+/* shaulhatzav.co.il — shared styles (23/11/2026).
    Look: real episode art behind every section, text on opaque "sticker" cards (3px ink outline + hard shadow),
    Fredoka headings, Rubik text. Colours with white text are dark enough for WCAG AA (teal-d 4.9:1, purple 5.6:1). */
 :root { --cream: #fff5e1; --teal: #17a3a8; --teal-d: #0e7c86; --teal-dd: #0b6770; --yellow: #ffd23f; --red: #d9432a; --pink: #ff7eb6; --purple: #6a48f0; --ink: #22264a; --sky: #7fd0ea; --mint: #a5dcc0; }
@@ -54,6 +54,26 @@ section { padding: 60px 0; scroll-margin-top: 80px; }
 .hero h1 span { color: var(--yellow); white-space: nowrap; }
 .hero p { font-size: 1.15rem; font-weight: 500; line-height: 1.5; margin: 12px 0 18px; }
 .btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+/* hero: one smaller card per game, each on its own game picture so children see which game it is */
+.games { max-width: 440px; margin-right: auto; margin-left: 0; display: flex; flex-direction: column; gap: 22px; }
+.game { position: relative; display: block; min-height: 240px; border-radius: 26px; background: center / cover no-repeat; color: #fff; text-decoration: none; transition: transform .12s, box-shadow .12s; }
+.game:hover { transform: translate(2px, 2px); box-shadow: 3px 4px 0 var(--ink); }
+.game .txt { position: absolute; inset: auto 0 0 0; padding: 34px 16px 12px; border-radius: 0 0 23px 23px; text-align: right;
+  background: linear-gradient(to top, rgba(14,124,134,.96) 0 45%, rgba(14,124,134,0)); }
+.game h1, .game h2 { font-size: clamp(1.75rem, 4.6vw, 2.3rem); color: #fff; -webkit-text-stroke: 7px var(--ink); paint-order: stroke fill; margin: 0; line-height: 1.1; }
+.game h1 span, .game h2 span { color: var(--yellow); white-space: nowrap; }
+.game .d { display: block; font-size: 1rem; font-weight: 600; line-height: 1.4; margin: 4px 0 2px; text-shadow: 0 1px 2px rgba(0,0,0,.4); max-width: 70%; }
+.game .pill { position: absolute; left: 14px; bottom: 14px; padding: 9px 18px; }
+.game .sign { position: absolute; top: 12px; left: 14px; line-height: 1; filter: drop-shadow(3px 4px 0 var(--ink)); }
+.game .sign.alef { display: flex; gap: 4px; direction: rtl; }
+.game .sign.alef b { font-family: 'Fredoka', 'Rubik', sans-serif; font-weight: 700; font-size: 2.6rem; width: 54px; height: 54px; display: grid; place-items: center; border-radius: 14px; border: 3px solid var(--ink); color: #fff; }
+.game .sign.alef b:nth-child(1) { background: var(--red); transform: rotate(-6deg); }
+.game .sign.alef b:nth-child(2) { background: var(--purple); transform: rotate(4deg); }
+.game .sign.alef b:nth-child(3) { background: #2f9e44; transform: rotate(-3deg); }
+.game .sign.race { font-size: 3rem; transform: rotate(-8deg); }
+.game .kart { position: absolute; left: 50%; top: 18px; height: 118px; width: auto; transform: translateX(-50%); filter: drop-shadow(0 6px 4px rgba(0,0,0,.35)); }
+.games .free { margin: 0; text-align: center; font-weight: 800; color: #fff; background: rgba(34,38,74,.75); border-radius: 999px; padding: 6px 14px; align-self: center; }
+.games .free a { color: var(--yellow); }
 .new { position: absolute; top: -20px; right: 8px; background: var(--red); color: #fff; font-weight: 900; padding: 7px 16px; border-radius: 16px; transform: rotate(6deg); }
 .rib { overflow: hidden; padding: 16px 0; margin: -32px 0 -18px; position: relative; z-index: 3; }
 .ribbon { background: var(--yellow); border-block: 3px solid var(--ink); transform: rotate(-1.4deg) scale(1.05); font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 1.45rem; white-space: nowrap; overflow: hidden; padding: 9px 0; text-align: center; }
@@ -130,7 +150,10 @@ footer nav .soc a { display: inline-flex; align-items: center; gap: 8px; margin:
   .bar .b { padding: 6px 8px 6px 10px; gap: 6px; } .logo { font-size: 1.2rem; padding-right: 2px; } .logo img { height: 28px; }
   .bar .pill { padding: 7px 12px; font-size: .9rem; }
   .hero { padding: 300px 0 46px; min-height: 0; background-position: 62% top; background-size: auto 330px; background-color: var(--teal-d); align-items: flex-end; }
-  .hero .panel { margin: 0 auto; }
+  .hero .panel, .games { margin: 0 auto; }
+  .game { min-height: 225px; }
+  .game .kart { height: 104px; top: 14px; }
+  .game .d { max-width: 62%; font-size: .95rem; }
   .hero3d { height: 330px; bottom: auto; }
   section { padding: 230px 0 34px; background-size: auto 250px; background-position: center top; background-color: var(--cream); }
   section.plain { padding-top: 40px; background-size: cover; }
