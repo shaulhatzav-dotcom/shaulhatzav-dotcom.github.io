@@ -66,7 +66,7 @@
      background:linear-gradient(90deg,#ff5d6c,#ffb13d,#ffe14d,#6be675,#4cc3ff,#a77bff);-webkit-background-clip:text;background-clip:text;color:transparent;
      filter:drop-shadow(0 4px 0 #fff) drop-shadow(0 4px 0 rgba(0,0,0,.25))}
   .sub{font-size:clamp(14px,2.4vw,19px);opacity:.95;text-align:center;max-width:640px;text-shadow:0 2px 0 rgba(0,0,0,.4)}
-  #tracks{display:grid;grid-template-columns:repeat(3,minmax(130px,200px));gap:14px}
+  #tracks{display:grid;grid-template-columns:repeat(4,minmax(130px,190px));gap:14px}
   @media (max-width:640px){#tracks{grid-template-columns:repeat(2,minmax(130px,180px))}}
   .card{cursor:pointer;border-radius:22px;overflow:hidden;border:5px solid #fff;box-shadow:0 7px 0 rgba(0,0,0,.3);position:relative;aspect-ratio:4/3;
         transition:transform .15s}
@@ -114,7 +114,7 @@
     .card .lock .need{font-size:12px}
   }
   @media (max-height:460px) and (min-width:640px){
-    #tracks{grid-template-columns:repeat(6,minmax(90px,125px))}
+    #tracks{grid-template-columns:repeat(4,minmax(90px,118px))}
   }
   .homeLink{align-self:flex-start;flex:none;background:#fff;color:#22264a;font-weight:900;text-decoration:none;
             border:3px solid #22264a;border-radius:999px;padding:5px 14px;box-shadow:3px 4px 0 #22264a;font-size:15px}
@@ -346,7 +346,9 @@ function buildSprites() {
   });
   SPR.tree2 = SPR.tree; SPR.pine2 = SPR.pine;   // until the 3D pictures load
   Object.assign(SPR, { jtree: SPR.tree, fern: SPR.bush, jflower: SPR.bush, monkey: SPR.bush, log: SPR.puddle, mud: SPR.puddle,
-    house: SPR.cupcake, tower: SPR.lolly, light: SPR.cone, ttree: SPR.tree, blocks: SPR.gumdrop, top: SPR.ball });
+    house: SPR.cupcake, tower: SPR.lolly, light: SPR.cone, ttree: SPR.tree, blocks: SPR.gumdrop, top: SPR.ball,
+    rocket: SPR.lolly, robot: SPR.snowman, crystal: SPR.cane, aplant: SPR.flower, moonrock: SPR.snowpile, crater: SPR.puddle,
+    dino: SPR.tree, cycad: SPR.palm, volcano: SPR.tree2, babydino: SPR.bush, egg: SPR.gumdrop, boulder: SPR.snowpile });
   SPR.fox = friendKart('#3a7bff', '#2350b8', '#ff8a1f', 'fox');
   SPR.bunny = friendKart('#a05cff', '#6d36c2', '#f4f1ff', 'bunny');
   SPR.squirrel = friendKart('#3ccf5a', '#24903a', '#b0612c', 'squirrel');
@@ -476,13 +478,38 @@ const TRACKS = [
     layout: [[90, 0, 0], [100, -4, 0], [100, 4, 0], [120, 0, 30], [120, 0, -30], [140, 5, 0], [140, -5, 20], [100, 3, -20], [100, -3, 0], [160, 4, 30], [160, -4, -30], [120, 0, 0], [90, 0, 0]],
     music: { mel: [72, 72, 79, 79, 81, 81, 79, 0, 77, 77, 76, 76, 74, 74, 72, 0, 79, 79, 77, 77, 76, 76, 74, 0, 72, 76, 79, 84, 79, 0, 72, 0], bass: [48, 55, 48, 55, 53, 60, 48, 55, 53, 60, 48, 55, 43, 50, 48, 0], bpm: 155 },
     card: 'linear-gradient(#4cc3ff 0 48%,#93da87 48%)', roadCss: '#8d93a0'
+  },
+  // 27/11 the user: "בוא נוסיף 2 מסכים למשחק הוא קצר מדי" -> picked Space and Dinosaur land
+  {
+    id: 'space', name: 'החלל', emo: '🚀', seed: 77, level: 2, cost: 1000,
+    sky: ['#0d1b4d', '#3a3f8f'], sun: '#ffe9a8', clouds: '#c9c3ff',
+    far: '#a98fd6', farCap: null, near: '#b99be3',
+    grass: ['#c3a3e6', '#bb9ade'], rumble: ['#4c8dff', '#a77bff'], road: ['#73767e', '#6f727a'], lane: '#ffffff',
+    dots: ['#a77bff', '#4cc3ff', '#ffffff'],
+    scenery: ['rocket', 'crystal', 'robot', 'aplant', 'crystal', 'rocket'], obstacles: ['moonrock', 'crater'], particle: 'star',
+    layout: [[90, 0, 0], [140, 3, 30], [140, -3, -30], [120, 0, 40], [120, 0, -40], [160, 4, 0], [160, -4, 20], [120, 2, -20], [120, -2, 0], [150, 3, 30], [150, -3, -30], [90, 0, 0]],
+    music: { mel: [72, 79, 76, 79, 84, 79, 76, 79, 74, 79, 77, 79, 83, 79, 77, 74, 72, 76, 79, 84, 88, 84, 79, 76, 77, 81, 79, 77, 76, 0, 72, 0], bass: [48, 55, 48, 55, 50, 57, 50, 57, 53, 60, 53, 60, 55, 62, 55, 0], bpm: 145 },
+    card: 'linear-gradient(#0d1b4d 0 48%,#c3a3e6 48%)', roadCss: '#8d93a0'
+  },
+  {
+    id: 'dino', name: 'ארץ הדינוזאורים', emo: '🦕', seed: 88, level: 2, cost: 1300,
+    sky: ['#ffd98a', '#fff4d6'], sun: '#fff27a', clouds: '#fff3dc',
+    far: '#8fb35a', farCap: null, near: '#7aa043',
+    grass: ['#6f9a2c', '#68922a'], rumble: ['#ff8a1f', '#3c9a3c'], road: ['#73767e', '#6f727a'], lane: '#ffffff',
+    dots: ['#ffe14d', '#ff8a1f', '#2f8f3a'],
+    scenery: ['dino', 'cycad', 'babydino', 'cycad', 'volcano', 'egg', 'cycad'], obstacles: ['boulder', 'mud'], particle: 'leaf',
+    layout: [[90, 0, 0], [130, -3, 20], [130, 3, -20], [150, 0, 0], [140, 4, 30], [140, -4, -30], [110, 0, 20], [110, 0, -20], [160, 3, 0], [160, -3, 0], [120, 0, 0], [90, 0, 0]],
+    music: { mel: [67, 67, 71, 74, 71, 67, 69, 71, 72, 72, 76, 79, 76, 72, 74, 76, 79, 79, 77, 76, 74, 72, 71, 69, 67, 71, 74, 79, 74, 0, 67, 0], bass: [43, 50, 43, 50, 48, 55, 48, 55, 47, 54, 47, 54, 43, 50, 43, 0], bpm: 150 },
+    card: 'linear-gradient(#ffd98a 0 48%,#6f9a2c 48%)', roadCss: '#8d93a0'
   }
 ];
 
 // sprite world widths (world units)
 const SIZE = { tree2: 1200, pine2: 1100, tree: 1300, flower: 420, flower2: 420, bush: 900, puddle: 640, cone: 300, palm: 1500, umbrella: 900, castle: 520, ball: 380,
   pine: 1300, snowman: 520, snowpile: 620, cane: 700, lolly: 650, cupcake: 520, gumdrop: 460, star: 330, kart: 430,
-  jtree: 1500, fern: 800, jflower: 700, monkey: 480, log: 560, mud: 640, house: 1100, tower: 1000, light: 700, ttree: 900, blocks: 480, top: 380 };
+  jtree: 1500, fern: 800, jflower: 700, monkey: 480, log: 560, mud: 640, house: 1100, tower: 1000, light: 700, ttree: 900, blocks: 480, top: 380,
+  rocket: 900, robot: 520, crystal: 620, aplant: 450, moonrock: 440, crater: 640,
+  dino: 1700, cycad: 1300, volcano: 1900, babydino: 520, egg: 420, boulder: 480 };
 
 let T = null;          // current theme
 let segments = [], trackLength = 0, finishZ = 0, totalStars = 0;
@@ -962,14 +989,15 @@ function drawFrontTreads(g, im, dw, dh) {
 // 3D scenery pictures (obj/<name>.png) replace the drawn objects as soon as they load
 const OBJ_NAMES = ['tree', 'tree2', 'bush', 'flower', 'flower2', 'puddle', 'cone', 'palm', 'umbrella', 'castle', 'ball',
   'pine', 'pine2', 'snowman', 'snowpile', 'cane', 'lolly', 'cupcake', 'gumdrop',
-  'jtree', 'fern', 'jflower', 'monkey', 'log', 'mud', 'house', 'tower', 'light', 'ttree', 'blocks', 'top'];
+  'jtree', 'fern', 'jflower', 'monkey', 'log', 'mud', 'house', 'tower', 'light', 'ttree', 'blocks', 'top',
+  'rocket', 'robot', 'crystal', 'aplant', 'moonrock', 'crater', 'dino', 'cycad', 'volcano', 'babydino', 'egg', 'boulder'];
 for (const n of OBJ_NAMES) {
   const im = new Image();
   im.onload = () => { SPR[n] = im; };
   im.src = 'obj/' + n + '.png';
 }
 // 3D panorama per track (bg/<id>.jpg); PANO_HORIZON = where its ground starts, as a fraction of its height
-const PANO = {}, PANO_HORIZON = { meadow: 0.67, beach: 0.41, snow: 0.56, candy: 0.6, jungle: 0.5, toycity: 0.56 };
+const PANO = {}, PANO_HORIZON = { meadow: 0.67, beach: 0.41, snow: 0.56, candy: 0.6, jungle: 0.5, toycity: 0.56, space: 0.47, dino: 0.5 };
 for (const t of TRACKS.map(t => t.id)) {
   const im = new Image();
   im.onload = () => { PANO[t] = im; if (T && T.id === t) makeLayers(); };
@@ -1057,7 +1085,7 @@ function ambient(dt) {
   if (!T.particle || state === 'menu') return;
   const rate = T.particle === 'snow' ? 40 : 10;
   if (Math.random() < rate * dt) {
-    const c = T.particle === 'snow' ? ['#ffffff'] : T.particle === 'petal' ? ['#ff9ec4', '#ffffff', '#ffe14d'] : T.particle === 'leaf' ? ['#5cc46c', '#9be05a', '#2f8f3a'] : ['#ff4f5e', '#ffe14d', '#6be675', '#4cc3ff', '#ffffff'];
+    const c = T.particle === 'snow' ? ['#ffffff'] : T.particle === 'petal' ? ['#ff9ec4', '#ffffff', '#ffe14d'] : T.particle === 'leaf' ? ['#5cc46c', '#9be05a', '#2f8f3a'] : T.particle === 'star' ? ['#ffe14d', '#ffffff', '#a9d8ff'] : ['#ff4f5e', '#ffe14d', '#6be675', '#4cc3ff', '#ffffff'];
     particles.push({ x: Math.random() * W, y: -3, vx: (-10 + Math.random() * 20) * PX, vy: (18 + Math.random() * 18) * PX, g: 0, life: 6, t: 0, c: c[Math.floor(Math.random() * c.length)], s: (T.particle === 'snow' ? 1 + (Math.random() < 0.3) : 1) * PX, sway: true });
   }
 }
