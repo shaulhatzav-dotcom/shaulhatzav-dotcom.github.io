@@ -355,6 +355,29 @@ function friendKart(body, dark, fur, kind) {
   }, 1.2);
 }
 
+// ---------- anonymous usage counter (same GoatCounter account as the alef-bet game: no cookies, totals only) ----------
+// Runs ONLY on the public site (shaulhatzav.co.il / github.io), never on localhost or a file.
+// ?nocount=1 once on a device leaves that device out (same switch as the alef-bet game, same address).
+const GC_CODE = 'shaul-alefbet';
+const countOn = (() => { try {
+  if (/[?&]nocount=1/.test(location.search)) localStorage.setItem('shaulNoCount', '1');
+  return !!GC_CODE && /(github\.io|shaulhatzav\.co\.il)$/.test(location.hostname) && !localStorage.getItem('shaulNoCount');
+} catch (e) { return false; } })();
+if (countOn) {
+  window.goatcounter = { no_onload: false, allow_local: false };
+  const s = document.createElement('script'); s.async = true; s.src = 'https://gc.zgo.at/count.js';
+  s.dataset.goatcounter = `https://${GC_CODE}.goatcounter.com/count`; document.head.appendChild(s);
+}
+const counted = new Set();
+function count(ev) {   // each event at most once per page load: 'race-play-meadow', 'race-done-meadow', ...
+  if (!countOn || counted.has(ev)) return; counted.add(ev);
+  const send = n => { try {
+    if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: ev, title: ev, event: true });
+    else if (n > 0) setTimeout(() => send(n - 1), 1500);   // count.js is still loading
+  } catch (e) {} };
+  send(4);
+}
+
 // ---------- tracks ----------
 // layout entries: [length, curve, hill]
 const TRACKS = [
@@ -1245,6 +1268,7 @@ function updateHud() {
 function show(id, on) { document.getElementById(id).classList.toggle('hidden', !on); }
 function startRace(idx) {
   initAudio(); musicStop();
+  count('race-play'); count('race-play-' + TRACKS[idx].id);
   currentIdx = idx;
   buildTrack(TRACKS[idx]); makeLayers(); resetRace();
   show('menu', false); show('result', false); show('pause', false); show('hud', true);
@@ -1263,6 +1287,8 @@ function finishRace() {
   const before = coinsTotal();
   localStorage.setItem('shaulRace.coins', before + starN);
   justUnlocked = TRACKS.filter(t => (t.cost || 0) > before && (t.cost || 0) <= before + starN);
+  count('race-done-' + T.id); if (place === 1) count('race-win-' + T.id);
+  justUnlocked.forEach(t => count('race-unlock-' + t.id));
 }
 // tracks 4-6 are closed until the child has collected enough coins (all races together)
 let justUnlocked = [];
