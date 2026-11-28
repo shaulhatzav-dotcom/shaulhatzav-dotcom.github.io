@@ -74,6 +74,9 @@ section { padding: 60px 0; scroll-margin-top: 80px; }
 .game .sign.alef b:nth-child(2) { background: var(--purple); transform: rotate(4deg); }
 .game .sign.alef b:nth-child(3) { background: #2f9e44; transform: rotate(-3deg); }
 .game .sign.race { font-size: 3rem; transform: rotate(-8deg); }
+/* third hero card (28/11): the YouTube channel; a drawn red play badge, not YouTube's logo */
+.game .sign.yt { width: 74px; height: 54px; display: grid; place-items: center; background: #d81f16; color: #fff; font-size: 1.9rem; border-radius: 16px; border: 3px solid var(--ink); transform: rotate(-5deg); }
+@media (min-width: 761px) { .game.ytc .d { max-width: 50%; } }   /* its button is wider than the games' buttons */
 .game .kart { position: absolute; left: 50%; top: 18px; height: 118px; width: auto; transform: translateX(-50%); filter: drop-shadow(0 6px 4px rgba(0,0,0,.35)); }
 .games .free { margin: 0; text-align: center; font-weight: 800; color: #fff; background: rgba(34,38,74,.75); border-radius: 999px; padding: 6px 14px; align-self: center; }
 .games .free a { color: var(--yellow); }
@@ -156,9 +159,12 @@ footer nav .soc a { display: inline-flex; align-items: center; gap: 8px; margin:
   @media (max-width: 480px) { .bar .pill.inst .t, .bar .pill.p .t { display: none; } .bar .pill.inst { padding: 5px 9px; } }
   .hero { padding: 300px 0 46px; min-height: 0; background-position: 62% top; background-size: auto 330px; background-color: var(--teal-d); align-items: flex-end; }
   .hero .panel, .games { margin: 0 auto; }
-  .game { min-height: 225px; }
+  .game { min-height: 275px; }
   .game .kart { height: 104px; top: 14px; }
-  .game .d { max-width: 62%; font-size: .95rem; }
+  /* 28/11: on a phone the button sat over the description, so here it comes under the text instead of beside it */
+  .game .d { max-width: none; font-size: .95rem; }
+  .game .pill { position: static; margin-top: 8px; }
+  .game .txt { padding-bottom: 14px; }
   .hero3d { height: 330px; bottom: auto; }
   section { padding: 230px 0 34px; background-size: auto 250px; background-position: center top; background-color: var(--cream); }
   section.plain { padding-top: 40px; background-size: cover; }
