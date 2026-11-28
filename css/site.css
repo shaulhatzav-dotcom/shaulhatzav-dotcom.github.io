@@ -34,6 +34,9 @@ img { max-width: 100%; height: auto; }
 .bar nav a:hover, .bar nav a[aria-current] { border-bottom-color: var(--teal-d); }
 .bar .pill { padding: 8px 18px; font-size: .98rem; box-shadow: 3px 4px 0 var(--ink); white-space: nowrap; }
 .menu { display: none; }
+/* install-to-home-screen button (28/11): shown by js/install.js only where installing is possible */
+.pill.inst { font: inherit; font-weight: 800; cursor: pointer; background: var(--yellow); }
+.bar .pill.inst { font-size: .98rem; }
 
 /* sections on episode art */
 section, .hero, .pagehead { position: relative; background: center / cover no-repeat; border-bottom: 3px solid var(--ink); }
@@ -149,6 +152,8 @@ footer nav .soc a { display: inline-flex; align-items: center; gap: 8px; margin:
   .menu div a:last-child { border-bottom: 0; }
   .bar .b { padding: 6px 8px 6px 10px; gap: 6px; } .logo { font-size: 1.2rem; padding-right: 2px; } .logo img { height: 28px; }
   .bar .pill { padding: 7px 12px; font-size: .9rem; }
+  .bar .pill.inst { font-size: .9rem; padding: 7px 10px; }
+  @media (max-width: 480px) { .bar .pill.inst .t, .bar .pill.p .t { display: none; } .bar .pill.inst { padding: 5px 9px; } }
   .hero { padding: 300px 0 46px; min-height: 0; background-position: 62% top; background-size: auto 330px; background-color: var(--teal-d); align-items: flex-end; }
   .hero .panel, .games { margin: 0 auto; }
   .game { min-height: 225px; }
