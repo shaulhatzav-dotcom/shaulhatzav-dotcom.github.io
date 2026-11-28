@@ -104,6 +104,18 @@
   #goBtn:active{transform:translateY(5px);box-shadow:0 2px 0 #c9a300,0 0 0 5px #fff}
   @keyframes goPulse{50%{transform:scale(1.06)}}
   #howTo{font-size:clamp(14px,2.2vw,18px);opacity:.9}
+  /* keyboard focus on the start screen (28/11) */
+  .kfocus{outline:5px solid #4cc3ff;outline-offset:5px}
+  /* who drives? (28/11) */
+  #drivers{align-items:center;gap:10px}
+  #drivers .lbl{font-weight:900;font-size:clamp(16px,2.6vw,21px);text-shadow:0 2px 0 rgba(0,0,0,.4)}
+  #drvRow{gap:10px;padding-bottom:8px}
+  .drv{pointer-events:auto;cursor:pointer;width:clamp(48px,8vw,70px);height:clamp(48px,8vw,70px);border-radius:50%;border:4px solid #fff;padding:0;
+       background:#4a4580 center/cover no-repeat;position:relative;opacity:.8;box-shadow:0 4px 0 rgba(0,0,0,.3);font:inherit}
+  .drv.emoji{background:#ffb13d;font-size:clamp(28px,5vw,42px);line-height:1;display:flex;align-items:center;justify-content:center}
+  .drv.on{border-color:#ffe14d;box-shadow:0 0 0 4px #ffe14d,0 4px 0 rgba(0,0,0,.3);opacity:1;transform:scale(1.12)}
+  .drv span{position:absolute;bottom:-9px;left:50%;transform:translateX(-50%);font-size:clamp(16px,2.6vw,22px);line-height:1;filter:drop-shadow(0 2px 0 rgba(0,0,0,.45))}
+  @media (max-height:460px){ .drv{width:40px;height:40px;border-width:3px} .drv span{font-size:15px;bottom:-7px} #drivers .lbl{font-size:14px} #drvRow{gap:8px;padding-bottom:6px} }
   .pickT{font-weight:900;font-size:clamp(16px,2.6vw,21px);text-shadow:0 2px 0 rgba(0,0,0,.4);margin-bottom:-4px}
   /* first race: the side arrows pulse until the child steers once */
   .arrow.hint{animation:arrowHint .7s ease-in-out infinite alternate;background:rgba(255,225,77,.45)}
@@ -178,7 +190,9 @@
   <!-- 28/11: of 13 visitors only 5 started a race. The first screen now leads with ONE big button (no reading needed);
        the long how-to text became one short line, and the trophy shelf moved under the tracks. -->
   <button class="btn" id="goBtn">▶ יוצאים!</button>
-  <div class="sub" id="howTo">👆 נוגעים בצד ימין או שמאל של המסך ושאול עובר נתיב (במחשב: החצים ⬅️ ➡️)</div>
+  <div class="sub" id="howTo">👆 נוגעים בצד ימין או שמאל של המסך ועוברים נתיב (במחשב: החצים ⬅️ ➡️)</div>
+  <!-- 28/11: who drives? Shaul or one of the friends -->
+  <div class="row" id="drivers"><div class="lbl">מי נוהג?</div><div class="row" id="drvRow"></div></div>
   <div class="row" id="modes">
     <div class="pill" id="wallet">🪙 <span id="walletN">0</span> מטבעות</div>
     <div class="row" style="gap:10px"><!-- the two buttons stay together when a phone wraps the row -->
@@ -385,6 +399,28 @@ function buildSprites() {
     for (const [x, y] of [[4, 3], [6.5, 2], [8, 4.2], [5, 5], [3, 5.2], [9, 2.6]]) k.circle(x, y, 0.32, '#ffffff', 0);
     k.ell(4.4, 2.2, 1, 0.5, 'rgba(255,255,255,0.6)', 0);
   });
+  // 28/11: banana peel (slip + funny spin) and jump ramp, on every track
+  SPR.banana = vec(14, 9, k => {
+    const g = k.g;
+    const flap = (x1, cx, cy, x2) => {
+      g.beginPath(); g.moveTo(5.8, 3); g.quadraticCurveTo(cx, cy, x1, 8.4); g.quadraticCurveTo((x1 + x2) / 2, 7.3, x2, 8.4);
+      g.quadraticCurveTo(cx + 1.4, cy + 1.3, 8.2, 3); g.closePath(); k.path('#ffe14d', 0.45);
+    };
+    flap(0.7, 1.4, 3.2, 3.6); flap(10.4, 11.6, 3.2, 13.3); flap(5.2, 6.4, 5.2, 8.8);
+    k.rect(6.1, 0.9, 1.8, 3, 0.7, '#ffd23a', 0.45); k.rect(6.3, 0.4, 1.4, 1, 0.3, '#7a4b22', 0.3);
+    k.ell(5, 6.6, 0.5, 1, '#fff6b0', 0);
+  });
+  SPR.ramp = vec(20, 9, k => {
+    const cols = ['#ff4f5e', '#ffb13d', '#ffe14d', '#6be675', '#4cc3ff', '#a77bff'];
+    k.poly([1, 8.6, 19, 8.6, 16.5, 1.2, 3.5, 1.2], '#ffffff', 0.5);
+    cols.forEach((c, i) => {
+      const y0 = 8.3 - i * 1.15, y1 = y0 - 1.15, a = (8.6 - y0) * 0.338, b = (8.6 - y1) * 0.338;
+      k.poly([1.3 + a, y0, 18.7 - a, y0, 18.7 - b, y1, 1.3 + b, y1], c, 0);
+    });
+    k.poly([10, 2.2, 13.2, 5.4, 11.2, 5.4, 11.2, 7.6, 8.8, 7.6, 8.8, 5.4, 6.8, 5.4], '#ffffff', 0.4);
+    k.rect(3.1, 0.5, 13.8, 1.1, 0.4, '#2b2140', 0);
+  });
+  SPR.shaul = friendKart('#ffcf1f', '#d49a00', '#3cc6b8', 'turtle');   // Shaul as an opponent, when the child drives a friend
   SPR.tree2 = SPR.tree; SPR.pine2 = SPR.pine;   // until the 3D pictures load
   Object.assign(SPR, { jtree: SPR.tree, fern: SPR.bush, jflower: SPR.bush, monkey: SPR.bush, log: SPR.puddle, mud: SPR.puddle,
     house: SPR.cupcake, tower: SPR.lolly, light: SPR.cone, ttree: SPR.tree, blocks: SPR.gumdrop, top: SPR.ball,
@@ -547,7 +583,7 @@ const TRACKS = [
 
 // sprite world widths (world units)
 const SIZE = { tree2: 1200, pine2: 1100, tree: 1300, flower: 420, flower2: 420, bush: 900, puddle: 640, cone: 300, palm: 1500, umbrella: 900, castle: 520, ball: 380,
-  pine: 1300, snowman: 520, snowpile: 620, cane: 700, lolly: 650, cupcake: 520, gumdrop: 460, star: 330, kart: 430,
+  pine: 1300, snowman: 520, snowpile: 620, cane: 700, lolly: 650, cupcake: 520, gumdrop: 460, star: 330, kart: 430, banana: 400, ramp: 760,
   jtree: 1500, fern: 800, jflower: 700, monkey: 480, log: 560, mud: 640, house: 1100, tower: 1000, light: 700, ttree: 900, blocks: 480, top: 380,
   rocket: 900, robot: 520, crystal: 620, aplant: 450, moonrock: 440, crater: 640,
   dino: 1700, cycad: 1300, volcano: 1900, babydino: 520, egg: 420, boulder: 480 };
@@ -623,7 +659,9 @@ function buildTrack(theme) {
       n += 30 + 18;
     } else if (r < 0.86) {                 // one obstacle (+ a star in another lane)
       const l = lane();
-      const kind = theme.obstacles[Math.floor(rng() * theme.obstacles.length)];
+      const k0 = theme.obstacles[Math.floor(rng() * theme.obstacles.length)];
+      // 28/11: about one obstacle in four is a banana peel (picked without the random stream, so the tracks stay as they were)
+      const kind = (n * 7 + theme.seed) % 4 === 0 ? 'banana' : k0;
       segments[n].items.push({ type: 'obstacle', kind, x: LANES[l] });
       if (rng() < 0.6) { const l2 = (l + 1 + Math.floor(rng() * 2)) % 3; segments[n].items.push({ type: 'star', x: LANES[l2] }); totalStars++; }
       n += 30 + Math.floor(rng() * 16);
@@ -634,9 +672,31 @@ function buildTrack(theme) {
     }
   }
 
-  // five real opponents on a starting grid in front of Shaul. Each has its own pace; the fastest ones are
-  // about as fast as Shaul, so winning needs turbo pads and dodging obstacles. Harder tracks = faster friends.
-  const kinds = [['fox', 'השועל', '🦊'], ['bunny', 'הארנבת', '🐰'], ['cat', 'החתול', '🐱'], ['squirrel', 'הסנאי', '🐿️'], ['grandma', 'סבתא', '👵']];
+  // jump ramps (28/11): a second pass with its own random numbers, in stretches of road with nothing on them.
+  // Three coins hang in the air after each ramp; only a jumping kart reaches them.
+  const rr = rngFrom(theme.seed + 1000);
+  for (let m = 150 + Math.floor(rr() * 80); m < finishSeg - 70; m += 300 + Math.floor(rr() * 160)) {
+    // The ramp makes its own room (user 28/11: "הרבה פעמים לפני קפיצה ברמפה יש מכשול"; empty stretches of road
+    // exist only right after an obstacle, so looking for one put the ramp behind it):
+    // nothing at all from just before the ramp to the landing, and no obstacle in ANY lane for two seconds before it.
+    const at = m;
+    for (let q = at - 60; q <= at + 28; q++) {
+      const near = q >= at - 12;
+      segments[q].items = segments[q].items.filter(it => {
+        const out = near || it.type === 'obstacle';
+        if (out && it.type === 'star') totalStars--;
+        return !out;
+      });
+    }
+    const l = Math.floor(rr() * 3);
+    segments[at].items.push({ type: 'ramp', x: LANES[l] });
+    for (let k = 1; k <= 3; k++) { segments[at + 2 + k * 4].items.push({ type: 'star', x: LANES[l], hi: true }); totalStars++; }
+  }
+
+  // five real opponents on a starting grid in front of the player. Each has its own pace; the fastest ones are
+  // about as fast as the player, so winning needs turbo pads and dodging obstacles. Harder tracks = faster friends.
+  // 28/11: the child picks who drives; the other five (Shaul too, if a friend drives) are the opponents.
+  const kinds = DRIVERS.filter(d => d.kind !== driver).map(d => [d.kind, d.name, d.emo, d.fem]);
   // first track (level 0) is the easy one; after 2+ losses in a row on a track the friends quietly slow down
   const easyStart = (theme.level || 0) === 0 ? 0.045 : 0;
   const losses = +(localStorage.getItem('shaulRace.losses.' + theme.id) || 0);
@@ -648,8 +708,8 @@ function buildTrack(theme) {
   const grid = [[0, 500], [2, 500], [1, 1100], [0, 1700], [2, 1700]];   // [lane, metres ahead of Shaul]
   kinds.forEach((k, i) => {
     const [l, ahead] = grid[i];
-    friends.push({ kind: k[0], name: k[1], emo: k[2], z: PLAYERZ + ahead, x: LANES[l], lane: l, pace: paces[i], speed: 0,
-      phase: rng() * 6.28, bumpT: 0, boostT: 0, aiT: 1 + rng() * 3, wasAhead: true, seen: new WeakSet(), hit: new WeakSet() });
+    friends.push({ kind: k[0], name: k[1], emo: k[2], fem: k[3], z: PLAYERZ + ahead, x: LANES[l], lane: l, pace: paces[i], speed: 0,
+      phase: rng() * 6.28, bumpT: 0, boostT: 0, jumpT: 0, spinT: 0, aiT: 1 + rng() * 3, wasAhead: true, seen: new WeakSet(), hit: new WeakSet() });
   });
 }
 
@@ -753,10 +813,30 @@ let position = 0, speed = 0, lane = 1, playerX = 0, camX = 0;
 let starN = 0, place = 6, bumpT = 0, boostT = 0, boostGroup = -1, tcount = 0, tGlobal = 0, finishT = 0;
 let demoTimer = 0, currentIdx = 0;
 let particles = [];
+// 28/11: jump (ramp) and spin (banana peel)
+const JUMP = 0.85, SPIN = 0.9;
+let jumpT = 0, spinT = 0, lastRamp = null;
+// 28/11: who drives. Shaul is the default; the friends' karts were already drawn.
+const DRIVERS = [['shaul', 'שאול', '🐢', 0], ['fox', 'השועל', '🦊', 0], ['bunny', 'הארנבת', '🐰', 1], ['cat', 'החתול', '🐱', 0],
+  ['squirrel', 'הסנאי', '🐿️', 0], ['grandma', 'סבתא', '👵', 1]].map(([kind, name, emo, fem]) => ({ kind, name, emo, fem }));
+let driver = localStorage.getItem('shaulRace.driver');
+if (!DRIVERS.some(d => d.kind === driver)) driver = 'shaul';
+const me = () => DRIVERS.find(d => d.kind === driver);
+// 28/11: the turbo looks different on every track ("super powers")
+const BOOST = {
+  meadow: { name: 'טורבו קשת! 🌈', f: ['#ff4f5e', '#ffe14d'], body: '#4cc3ff', p: ['#ff4f5e', '#ffb13d', '#ffe14d', '#6be675', '#4cc3ff', '#a77bff'] },
+  beach: { name: 'טורבו בועות! 🌊', f: ['#4cc3ff', '#ffffff'], body: '#ff8a1f', p: ['#ffffff', '#bfe6ff', '#8fd6ff'], ring: true },
+  snow: { name: 'טורבו שלג! ❄️', f: ['#8fd6ff', '#ffffff'], body: '#e8333a', p: ['#ffffff', '#dff1ff'] },
+  candy: { name: 'טורבו גלידה! 🍦', f: ['#ff5fb0', '#ffe14d'], body: '#ff9ec4', p: ['#ff4f5e', '#ffe14d', '#6be675', '#4cc3ff', '#ffffff'], cone: true },
+  jungle: { name: "טורבו ג'ונגל! 🍃", f: ['#ff8a1f', '#ffe14d'], body: '#2f8f3a', p: ['#5cc46c', '#9be05a', '#ffe14d'] },
+  toycity: { name: 'טורבו צעצועים! 🧸', f: ['#ff4f5e', '#ffe14d'], body: '#4c8dff', p: ['#ff4f5e', '#ffe14d', '#4c8dff', '#6be675'] },
+  space: { name: 'טורבו חלל! 🚀', f: ['#a77bff', '#4cc3ff'], body: '#f4f4f4', p: ['#ffe14d', '#ffffff', '#a9d8ff'] },
+  dino: { name: 'טורבו דינו! 🦖', f: ['#ff4f1f', '#ffe14d'], body: '#6f9a2c', p: ['#ff8a1f', '#ffe14d', '#ff4f1f'] }
+};
 
 function resetRace() {
   position = 0; speed = 0; lane = 1; playerX = 0; camX = 0; starN = 0; place = friends.length + 1;
-  bumpT = 0; boostT = 0; boostGroup = -1; finishT = 0; particles = [];
+  bumpT = 0; boostT = 0; boostGroup = -1; finishT = 0; particles = []; jumpT = 0; spinT = 0; lastRamp = null;
   layers.forEach(l => l.off = 0);
   document.getElementById('starN').textContent = '0';
   document.getElementById('placeN').textContent = place;
@@ -894,7 +974,9 @@ function render() {
       if (it.done || it.type === 'boost') continue;
       if (it.type === 'star') {
         drawSprite(SPR.star, SIZE.star, s, X + s * it.x * ROAD * W / 2, Y, seg.clip,
-          { sx: 0.35 + 0.65 * Math.abs(Math.cos(tGlobal * 3 + seg.index)), dy: -0.6 - 0.15 * Math.sin(tGlobal * 5 + seg.index) });
+          { sx: 0.35 + 0.65 * Math.abs(Math.cos(tGlobal * 3 + seg.index)), dy: (it.hi ? -2.5 : -0.6) - 0.15 * Math.sin(tGlobal * 5 + seg.index) });
+      } else if (it.type === 'ramp') {
+        drawSprite(SPR.ramp, SIZE.ramp, s, X + s * it.x * ROAD * W / 2, Y, seg.clip);
       } else {
         drawSprite(SPR[it.kind], SIZE[it.kind] * 0.9, s, X + s * it.x * ROAD * W / 2, Y, seg.clip);
       }
@@ -906,7 +988,10 @@ function render() {
       const shake = f.bumpT > 0.6 ? Math.sin(tGlobal * 60) * sc * SIZE.kart * W * 0.012 : 0;
       const fx = lerp(seg.p1.screen.x, seg.p2.screen.x, pct) + sc * f.x * ROAD * W / 2 + shake;
       const fy = lerp(seg.p1.screen.y, seg.p2.screen.y, pct);
-      drawSprite(SPR[f.kind], SIZE.kart, sc, fx, fy - (Math.floor(tGlobal * 12) % 2), seg.clip);
+      // in the air after a ramp, or spinning on a banana peel
+      const jf = f.jumpT > 0 ? Math.sin((1 - f.jumpT / JUMP) * Math.PI) : 0;
+      const ex = jf || f.spinT > 0 ? { dy: -0.5 * jf - 0.0001, sx: f.spinT > 0 ? Math.max(0.12, Math.abs(Math.cos((1 - f.spinT / SPIN) * Math.PI * 2))) : 1 } : null;
+      drawSprite(SPR[f.kind], SIZE.kart, sc, fx, fy - (Math.floor(tGlobal * 12) % 2), seg.clip, ex);
     }
   }
 
@@ -935,19 +1020,59 @@ function drawPlayer() {
   const bob = moving ? Math.abs(Math.sin(tGlobal * 18)) * 1.5 : 0;
   const shake = bumpT > 0.6 ? Math.sin(tGlobal * 60) * 4 : 0;
   const tilt = (LANES[lane] - playerX) * 0.5;
+  const jf = jumpT > 0 ? Math.sin((1 - jumpT / JUMP) * Math.PI) : 0;   // 0..1..0 through the jump
   hctx.translate((p.x) * sx, p.y * sy);
   hctx.scale(unit, unit);
-  hctx.translate(shake, -bob);
+  // the shadow stays on the road and gets smaller while the kart is in the air
+  hctx.fillStyle = 'rgba(0,0,0,' + (0.25 - 0.1 * jf) + ')'; hctx.beginPath();
+  hctx.ellipse(0, -3, 58 * (1 - 0.3 * jf), 8 * (1 - 0.3 * jf), 0, 0, Math.PI * 2); hctx.fill();
+  hctx.translate(shake, -bob - jf * 80);
   hctx.rotate(-tilt * 0.25);
-  const im = KART_IMG.shaul;
+  if (spinT > 0) {   // banana peel: one full funny turn around the kart's middle
+    const a = 1 - spinT / SPIN;
+    hctx.translate(0, -62); hctx.rotate(a * a * (3 - 2 * a) * Math.PI * 2); hctx.translate(0, 62);
+  }
+  const im = KART_IMG[driver];
   if (im) {
-    // 3D kart image (karts/shaul.png): about 120 units wide, bottom on the road
+    // 3D kart image (karts/<driver>.png): about 120 units wide, bottom on the road
     const dw = 138, dh = dw * im.height / im.width;
-    hctx.fillStyle = 'rgba(0,0,0,0.25)'; hctx.beginPath(); hctx.ellipse(0, -3, 58, 8, 0, 0, Math.PI * 2); hctx.fill();
     hctx.drawImage(im, -dw / 2, -dh, dw, dh);
-    drawFrontTreads(hctx, im, dw, dh);
-    drawSpinningTreads(hctx, dw, dh);
-  } else drawShaulKart(hctx, tGlobal, moving);
+    if (driver === 'shaul') { drawFrontTreads(hctx, im, dw, dh); drawSpinningTreads(hctx, dw, dh); }   // tyre boxes are measured on shaul.png only
+  } else if (driver === 'shaul') drawShaulKart(hctx, tGlobal, moving);
+  else { const c = SPR[driver], dw = 112, dh = dw * c.height / c.width; hctx.drawImage(c, -dw / 2, -dh, dw, dh); }
+  if (boostT > 0 && state !== 'demo') drawBooster(hctx);
+}
+// Turbo "super power": two little rockets on the back of the kart with a flickering flame.
+// In the candy land they are ice-cream cones. Colours come from BOOST[track].
+function drawBooster(g) {
+  const B = BOOST[T.id] || BOOST.meadow, INK2 = '#1b1b2f';
+  g.lineJoin = 'round'; g.lineWidth = 2.2; g.strokeStyle = INK2;
+  for (const x of [-27, 27]) {
+    const fl = 0.7 + 0.3 * Math.sin(tGlobal * 46 + x);
+    for (const [w, len, col] of [[9, 34, B.f[0]], [5, 20, B.f[1]]]) {     // flame: outer and inner tongue
+      g.beginPath(); g.moveTo(x - w, -30); g.quadraticCurveTo(x - w * 0.6, -30 + len * fl * 0.6, x, -30 + len * fl);
+      g.quadraticCurveTo(x + w * 0.6, -30 + len * fl * 0.6, x + w, -30); g.closePath(); g.fillStyle = col; g.fill();
+    }
+    if (B.cone) {                                                       // ice-cream rocket
+      g.beginPath(); g.moveTo(x - 10, -56); g.lineTo(x + 10, -56); g.lineTo(x, -27); g.closePath(); g.fillStyle = '#d9a05b'; g.fill(); g.stroke();
+      g.beginPath(); g.arc(x, -62, 11, 0, Math.PI * 2); g.fillStyle = B.body; g.fill(); g.stroke();
+      g.beginPath(); g.arc(x - 3, -74, 4, 0, Math.PI * 2); g.fillStyle = '#ff3d68'; g.fill(); g.stroke();
+    } else {                                                            // rocket: tube + nose
+      g.beginPath(); g.moveTo(x - 9, -30); g.lineTo(x - 9, -58); g.quadraticCurveTo(x, -78, x + 9, -58); g.lineTo(x + 9, -30); g.closePath();
+      g.fillStyle = B.body; g.fill(); g.stroke();
+      g.beginPath(); g.rect(x - 9, -40, 18, 6); g.fillStyle = B.f[0]; g.fill(); g.stroke();
+    }
+  }
+}
+// a trail in the track's colours while the turbo is on (bubbles on the beach)
+function boostTrail() {
+  const B = BOOST[T.id] || BOOST.meadow, ps = playerScreen();
+  for (let i = 0; i < 2; i++) {
+    const side = Math.random() < 0.5 ? -1 : 1;
+    particles.push({ x: ps.x + side * ps.w * (0.15 + Math.random() * 0.2), y: ps.y - ps.h * 0.12, vx: side * (20 + Math.random() * 60) * PX,
+      vy: (-70 - Math.random() * 60) * PX, g: (B.ring ? -30 : 150) * PX, life: 0.9, t: 0, c: B.p[Math.floor(Math.random() * B.p.length)],
+      s: (B.ring ? 4 + Math.random() * 4 : 2.2 + Math.random() * 1.6) * PX, ring: B.ring });
+  }
 }
 // Moving tread bands drawn over the two rear tyres of karts/shaul.png, so the wheels look like they spin.
 // Tyre boxes are fractions of that image (measured from the dark tyre pixels); the bands move with the
@@ -1048,7 +1173,7 @@ for (const t of TRACKS.map(t => t.id)) {
 const KART_IMG = {};
 for (const n of ['shaul', 'fox', 'bunny', 'squirrel', 'cat', 'grandma']) {
   const im = new Image();
-  im.onload = () => { KART_IMG[n] = im; if (n !== 'shaul') SPR[n] = im; };
+  im.onload = () => { KART_IMG[n] = im; SPR[n] = im; };
   im.src = 'karts/' + n + '.png';
 }
 // Shaul from behind, looking at the road: teal head with turtle spots, glasses temples,
@@ -1137,7 +1262,11 @@ function updateParticles(dt) {
   particles = particles.filter(p => p.t < p.life && p.y < H + 5);
 }
 function drawParticles() {
-  for (const p of particles) { ctx.fillStyle = p.c; ctx.beginPath(); ctx.arc(p.x, p.y, p.s * 0.6, 0, Math.PI * 2); ctx.fill(); }
+  for (const p of particles) {
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.s * 0.6, 0, Math.PI * 2);
+    if (p.ring) { ctx.strokeStyle = p.c; ctx.lineWidth = Math.max(1, PX * 0.7); ctx.stroke(); }   // a soap bubble
+    else { ctx.fillStyle = p.c; ctx.fill(); }
+  }
 }
 function drawSpeedLines() {
   if (boostT <= 0) return;
@@ -1172,8 +1301,8 @@ const VOICE_KEYS = ['c3', 'c2', 'c1', 'go', 'turbo', 'pass1', 'pass2', 'behind',
                     'oops', 'splash', 'win', 'near', 'again', 'unlock', 'trophy', 'locked', 'steer', 'steerKeys'];
 // phone/tablet = touch is the main pointer; a computer gets the keyboard how-to (user 28/11: "זה מבלבל במחשב")
 const TOUCH = matchMedia('(hover: none) and (pointer: coarse)').matches;
-const STEER = TOUCH ? { line: '👆 נוגעים בצד ימין או שמאל של המסך ושאול עובר נתיב', toast: '👆 נוגעים בצד כדי לעבור נתיב', voice: 'steer' }
-                    : { line: '⬅️ ➡️ לוחצים על החצים במקלדת ושאול עובר נתיב', toast: '⬅️ ➡️ לוחצים על החצים במקלדת', voice: 'steerKeys' };
+const STEER = TOUCH ? { line: '👆 נוגעים בצד ימין או שמאל של המסך ועוברים נתיב', toast: '👆 נוגעים בצד כדי לעבור נתיב', voice: 'steer' }
+                    : { line: '⬅️ ➡️ לוחצים על החצים במקלדת ועוברים נתיב', toast: '⬅️ ➡️ לוחצים על החצים במקלדת', voice: 'steerKeys' };
 document.getElementById('howTo').textContent = STEER.line;
 const VOICE = {}, saidAt = {};
 let voiceGain, voiceSrc = null, voiceEnd = 0, voicesLoading = false, sayTimer = 0;
@@ -1225,6 +1354,8 @@ const SFX = {
   lane() { const t = AC.currentTime; tone(880, t, 0.05, 'triangle', 0.35, sfxGain, 1200); },
   beep() { tone(660, AC.currentTime, 0.18, 'square', 0.5); },
   go() { tone(1320, AC.currentTime, 0.45, 'square', 0.5); },
+  boing() { const t = AC.currentTime; tone(150, t, 0.2, 'sine', 1, sfxGain, 560); tone(560, t + 0.18, 0.28, 'sine', 0.8, sfxGain, 170); tone(260, t + 0.44, 0.3, 'triangle', 0.5, sfxGain, 760); },
+  jump() { const t = AC.currentTime; tone(280, t, 0.38, 'triangle', 0.7, sfxGain, 1150); tone(1150, t + 0.5, 0.25, 'triangle', 0.4, sfxGain, 420); },
   fanfare() { const t = AC.currentTime; [523, 659, 784, 1047, 784, 1047].forEach((f, i) => tone(f, t + i * 0.13, i === 5 ? 0.6 : 0.12, 'square', 0.45)); }
 };
 function sfx(name) { if (AC && !muted) SFX[name](); }
@@ -1268,7 +1399,9 @@ function update(dt) {
   const racing = state === 'race' || state === 'finish' || state === 'demo';
   if (racing) {
     if (bumpT > 0) bumpT -= dt;
-    if (boostT > 0) boostT -= dt;
+    if (boostT > 0) { boostT -= dt; if (state === 'race' && Math.random() < 45 * dt) boostTrail(); }
+    if (jumpT > 0) jumpT -= dt;
+    if (spinT > 0) spinT -= dt;
     let target = MAXSPEED;
     if (state === 'demo') target = MAXSPEED * 0.55;
     if (boostT > 0) target *= 1.45;
@@ -1299,11 +1432,25 @@ function update(dt) {
 function collisions() {
   const pz = position + PLAYERZ, idx = Math.floor(pz / SEG);
   const ps = playerScreen();
+  const air = jumpT > 0.1;   // in the air after a ramp: the kart flies over everything on the road
+  const drv = me();
   for (let s = idx - 1; s <= idx + 1; s++) {
     const seg = segments[(s + segments.length) % segments.length];
     for (const it of seg.items) {
       if (it.done || Math.abs(it.x - playerX) > 0.32) continue;
-      if (it.type === 'star') {
+      if (it.type === 'ramp') {
+        if (!air && it !== lastRamp) {
+          lastRamp = it; jumpT = JUMP; sfx('jump'); toast('הופ! קפיצה! 🤸');
+          burst(ps.x, ps.y - 4, 14, ['#ffffff', '#ffe14d', '#4cc3ff'], { v: 70, up: 20, life: 0.5 });
+        }
+        continue;
+      }
+      if (it.type === 'star' ? !!it.hi !== air : air) continue;   // high coins only in the air, everything else only on the road
+      if (it.type === 'obstacle' && it.kind === 'banana') {
+        it.done = true; bumpT = 1.1; spinT = SPIN; sfx('boing');
+        burst(ps.x, ps.y - ps.h * 0.3, 16, ['#ffe14d', '#fff6b0', '#ffffff'], { v: 90, up: 70, life: 0.7 });
+        toast('אוי, בננה! 🍌'); say('oops', false, 4);
+      } else if (it.type === 'star') {
         it.done = true; starN++; sfx('star');
         const el = document.getElementById('stars'); el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
         document.getElementById('starN').textContent = starN;
@@ -1315,7 +1462,7 @@ function collisions() {
         burst(ps.x, ps.y - ps.h * 0.3, 18, col, { v: 80, up: 60, life: 0.7 });
         toast(it.kind === 'puddle' ? 'שפריץ! 💦' : 'אופס! 🙃'); say(it.kind === 'puddle' ? 'splash' : 'oops', false, 4);
       } else if (it.type === 'boost' && it.g !== boostGroup) {
-        boostGroup = it.g; boostT = 2.2; sfx('boost'); toast('טוּרְבּוֹ! ⚡'); say('turbo', false, 3);
+        boostGroup = it.g; boostT = 2.2; sfx('boost'); toast((BOOST[T.id] || BOOST.meadow).name); say('turbo', false, 3);
         burst(ps.x, ps.y - 4, 16, ['#ff4f5e', '#ffb13d', '#ffe14d', '#6be675', '#4cc3ff', '#a77bff'], { v: 60, up: 10, life: 0.6 });
       }
     }
@@ -1325,15 +1472,16 @@ function collisions() {
   for (const f of friends) {
     const dz = f.z - pz, isAhead = dz > 0;
     if (isAhead) ahead++;
-    if (f.wasAhead && !isAhead) { sfx('pass'); toast('שאול עקף את ' + f.name + '! ' + f.emo); say(pick(['pass1', 'pass2']), false, 6); }
-    else if (!f.wasAhead && isAhead) { sfx('honk'); toast(f.emo + ' ' + f.name + (f.kind === 'bunny' || f.kind === 'grandma' ? ' עקפה' : ' עקף') + ' את שאול!'); say('behind', false, 12); }
+    // pass2 says "קדימה, שאול!", so it is only for Shaul himself
+    if (f.wasAhead && !isAhead) { sfx('pass'); toast(drv.name + (drv.fem ? ' עקפה' : ' עקף') + ' את ' + f.name + '! ' + f.emo); say(driver === 'shaul' ? pick(['pass1', 'pass2']) : 'pass1', false, 6); }
+    else if (!f.wasAhead && isAhead) { sfx('honk'); toast(f.emo + ' ' + f.name + (f.fem ? ' עקפה' : ' עקף') + ' את ' + drv.name + '!'); say('behind', false, 12); }
     f.wasAhead = isAhead;
-    if (Math.abs(dz) < 150 && Math.abs(f.x - playerX) < 0.28) {
+    if (!air && f.jumpT <= 0.1 && Math.abs(dz) < 150 && Math.abs(f.x - playerX) < 0.28) {
       if (dz < 0) {
         // the friend drove into Shaul from behind: the friend is the one who slows down, Shaul keeps going
         if (f.bumpT <= 0) {
           f.bumpT = 1.3; f.speed = Math.min(f.speed, speed * 0.6); f.z = Math.min(f.z, pz - 160);
-          sfx('bump'); toast('אוי! ' + f.name + ' ' + f.emo + ' נתקע' + (f.kind === 'bunny' || f.kind === 'grandma' ? 'ה' : '') + ' מאחורי שאול');
+          sfx('bump'); toast('אוי! ' + f.name + ' ' + f.emo + ' נתקע' + (f.fem ? 'ה' : '') + ' מאחורי ' + drv.name);
         }
       } else if (bumpT <= 0) {
         // Shaul drove into a friend in front
@@ -1361,6 +1509,8 @@ function updateFriends(dt) {
     // a bump slows a friend exactly like Shaul: down to about a third, then back up over 1.3 s
     if (f.bumpT > 0) { f.bumpT -= dt; target *= 0.35 + 0.65 * (1 - Math.max(0, f.bumpT) / 1.3); }
     if (f.boostT > 0) { f.boostT -= dt; target *= 1.3; }
+    if (f.jumpT > 0) f.jumpT -= dt;
+    if (f.spinT > 0) f.spinT -= dt;
     if (f.z > finishZ + PLAYERZ + 1800) target = 0;          // parked after the finish line
     f.speed += (target - f.speed) * Math.min(1, dt * (f.speed < target ? 1.6 : 3));
     f.z += f.speed * dt;
@@ -1380,8 +1530,10 @@ function updateFriends(dt) {
           if (Math.random() < 0.7) pickLane(f.lane);           // 7 of 10 times they see it in time
         }
         if (s <= idx + 1 && Math.abs(it.x - f.x) < 0.28 && !f.hit.has(it)) {
+          if (it.type === 'ramp') { f.hit.add(it); f.jumpT = JUMP; }
+          if (f.jumpT > 0.1) continue;                            // in the air: over everything
           if (it.type === 'obstacle' && !it.done) {
-            f.hit.add(it); f.bumpT = 1.3;
+            f.hit.add(it); f.bumpT = 1.3; if (it.kind === 'banana') f.spinT = SPIN;
             if (Math.abs(gap) < 2500) sfx('bump');               // close enough to hear it
           }
           if (it.type === 'boost') { f.hit.add(it); f.boostT = 1.6; }
@@ -1419,7 +1571,8 @@ function updateHud() {
 function show(id, on) { document.getElementById(id).classList.toggle('hidden', !on); }
 function startRace(idx) {
   initAudio(); musicStop();
-  count('race-play'); count('race-play-' + TRACKS[idx].id); count('race-mode-' + mode);
+  count('race-play'); count('race-play-' + TRACKS[idx].id); count('race-mode-' + mode); count('race-driver-' + driver);
+  document.querySelector('#prog .me').textContent = me().emo;
   currentIdx = idx;
   buildTrack(TRACKS[idx]); makeLayers(); resetRace();
   show('menu', false); show('result', false); show('pause', false); show('hud', true);
@@ -1485,7 +1638,7 @@ function showResult() {
   document.getElementById('resTip').textContent = place === 1 ? '' : 'טיפ: נוסעים על החצים הצבעוניים ⚡ ומתחמקים מהמכשולים';
   const best = +(localStorage.getItem('shaulRace.best.' + T.id) || 0);
   document.getElementById('resStars').textContent = (starN
-    ? '🪙 שאול אסף ' + starN + ' מטבעות!' + (best > starN ? '  (השיא: ' + best + ')' : '')
+    ? '🪙 ' + me().name + (me().fem ? ' אספה ' : ' אסף ') + starN + ' מטבעות!' + (best > starN ? '  (השיא: ' + best + ')' : '')
     : 'בפעם הבאה נאסוף מטבעות 🪙') + '  ·  בקופה: ' + coinsTotal();
   const next = TRACKS.find(t => !isOpen(t));
   document.getElementById('resUnlock').textContent = justUnlocked.length
@@ -1510,6 +1663,25 @@ function resumeGame() {
   if (state === 'race') musicStart(T.music);
 }
 
+// 28/11: "who drives?" row on the start screen. Shaul's button shows his face, the friends show their karts.
+function buildDrivers() {
+  const box = document.getElementById('drvRow'); box.innerHTML = '';
+  DRIVERS.forEach(d => {
+    const b = document.createElement('button'); b.className = 'drv' + (d.kind === driver ? ' on' : ''); b.title = d.name;
+    // faces, not backs (user 28/11): faces/<kind>.jpg are cut from the cast picture (art-options/make_faces.py).
+    // The cat's face was generated on fal (art-options/face-cat.png), since the cast picture has no cat.
+    b.style.backgroundImage = `url(${d.kind === 'shaul' ? 'shaul.png' : 'faces/' + d.kind + '.jpg'})`;
+    b.addEventListener('click', () => setDriver(d.kind));
+    box.appendChild(b);
+  });
+}
+function setDriver(k) {
+  initAudio(); sfx('lane');
+  driver = k; localStorage.setItem('shaulRace.driver', k);
+  buildDrivers(); markMenuSel();
+  // the demo race behind the menu shows the new driver at once (and Shaul among the others)
+  if (state === 'demo') { buildTrack(TRACKS[currentIdx]); resetRace(); speed = MAXSPEED * 0.5; }
+}
 // a closed track: shake the card and say how many coins are still missing
 function tryStart(i) {
   const t = TRACKS[i];
@@ -1531,7 +1703,7 @@ function buildMenu() {
       ${open ? '' : `<div class="lock"><div class="pad">🔒</div><div class="need">🪙 ${t.cost}</div></div>`}
       ${best && open ? `<div class="best">🪙 ${best}</div>` : ''}${trophyOf(t) ? `<div class="medal">${MEDAL[trophyOf(t)]}</div>` : ''}<div class="name">${t.emo} ${t.name}</div>`;
     d.addEventListener('click', () => tryStart(i));
-    d.addEventListener('mouseenter', () => { menuSel = i; markMenuSel(); });
+    d.addEventListener('mouseenter', () => { menuSel = i; kOn = false; kRow = 'trk'; markMenuSel(); });
     box.appendChild(d);
   });
   markMenuSel();
@@ -1540,6 +1712,7 @@ function buildMenu() {
   const lastI = TRACKS.findIndex(t => t.id === localStorage.getItem('shaulRace.last'));
   goIdx = lastI >= 0 && isOpen(TRACKS[lastI]) ? lastI : 0;
   document.getElementById('goBtn').textContent = '▶ יוצאים! ' + TRACKS[goIdx].emo;
+  buildDrivers();
   buildShelf();
   setMode(mode);
   const portrait = innerHeight > innerWidth && matchMedia('(pointer:coarse)').matches;
@@ -1559,18 +1732,61 @@ function steer(dir) {
 }
 cvs.addEventListener('pointerdown', e => { initAudio(); steer(e.clientX < innerWidth / 2 ? -1 : 1); });
 let menuSel = 0;
-function markMenuSel() { document.querySelectorAll('#tracks .card').forEach((c, i) => c.classList.toggle('sel', i === menuSel)); }
+// Keyboard on the start screen (28/11, user: "שגם הכפתור של למעלה ולמטה יעבוד"): four rows, top to bottom:
+// the big button, who drives, easy/normal, the tracks. Up/down move between rows (and between rows of tracks),
+// left/right move inside a row, Enter starts. The blue ring shows only after a key was pressed (not on phones).
+let kRow = 'go', kOn = false;
+const K_ROWS = ['go', 'drv', 'mode', 'trk'];
+function trackCols() {
+  const c = [...document.querySelectorAll('#tracks .card')];
+  return c.length ? Math.max(1, c.filter(x => x.offsetTop === c[0].offsetTop).length) : 1;
+}
+function markMenuSel() {
+  const cards = document.querySelectorAll('#tracks .card');
+  cards.forEach((c, i) => c.classList.toggle('sel', i === menuSel && (kRow === 'trk' || !kOn)));
+  document.querySelectorAll('.kfocus').forEach(el => el.classList.remove('kfocus'));
+  if (!kOn) return;
+  const el = kRow === 'go' ? document.getElementById('goBtn') : kRow === 'drv' ? document.querySelector('.drv.on')
+    : kRow === 'mode' ? document.querySelector('#modes .mode.on') : cards[menuSel];
+  if (!el) return;
+  if (kRow !== 'trk') el.classList.add('kfocus');
+  el.scrollIntoView({ block: 'center' });   // at once: a smooth scroll fell behind when the key was pressed quickly
+}
+function menuKey(left, right, up, down, enter) {
+  kOn = true;
+  const n = TRACKS.length, cols = trackCols(), dir = left ? 1 : -1;   // RTL: the next item is on the left
+  if (up) {
+    if (kRow === 'trk' && menuSel - cols >= 0) menuSel -= cols;
+    else kRow = K_ROWS[Math.max(0, K_ROWS.indexOf(kRow) - 1)];
+  } else if (down) {
+    if (kRow !== 'trk') kRow = K_ROWS[K_ROWS.indexOf(kRow) + 1];
+    else if (menuSel + cols < n) menuSel += cols;
+    else if (Math.floor(menuSel / cols) < Math.floor((n - 1) / cols)) menuSel = n - 1;
+  } else if (left || right) {
+    if (kRow === 'go') kRow = 'trk';                                    // as before: sideways arrows choose a track
+    if (kRow === 'trk') menuSel = clamp(menuSel + dir, 0, n - 1);
+    else if (kRow === 'drv') {
+      const i = clamp(DRIVERS.findIndex(d => d.kind === driver) + dir, 0, DRIVERS.length - 1);
+      if (DRIVERS[i].kind !== driver) setDriver(DRIVERS[i].kind);
+    } else if (kRow === 'mode') { sfx('lane'); setMode(dir > 0 ? 'normal' : 'easy'); }
+  } else if (enter) {
+    if (kRow === 'trk') return tryStart(menuSel);
+    count('race-go-btn'); return startRace(goIdx);
+  }
+  if (up || down) sfx('lane');
+  markMenuSel();
+}
 addEventListener('keydown', e => {
   const left = e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A';
   const right = e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D';
+  const up = e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W';
+  const down = e.key === 'ArrowDown' || e.key === 's' || e.key === 'S';
   const enter = e.key === 'Enter' || e.key === ' ';
   initAudio();
-  if (left || right || enter) e.preventDefault();
-  // menu: arrows choose a track (RTL grid: the first card is on the right), Enter starts
+  if (left || right || enter || up || down) e.preventDefault();
+  // menu: arrows move around the start screen (RTL: the first item is on the right), Enter starts
   if (state === 'demo') {
-    if (left) { menuSel = Math.min(TRACKS.length - 1, menuSel + 1); markMenuSel(); }
-    else if (right) { menuSel = Math.max(0, menuSel - 1); markMenuSel(); }
-    else if (enter) tryStart(menuSel);
+    if (left || right || up || down || enter) menuKey(left, right, up, down, enter);
     return;
   }
   // result screen: Enter = once more
