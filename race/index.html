@@ -13,6 +13,13 @@
 <meta name="description" content="משחק מירוץ חינמי לילדים בגילאי 3 עד 7: נוהגים עם שאול הצב, אוספים מטבעות ופותחים מסלולים חדשים. בלי פרסומות, בלי קניות, בלי הרשמה.">
 <link rel="canonical" href="https://shaulhatzav.co.il/race/">
 <link rel="icon" href="shaul.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#0e7c86">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="שאול הצב">
+<script src="/js/install.js" defer></script>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>המרוץ של שאול הצב | משחק מירוץ חינמי לילדים</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -132,7 +139,9 @@
   }
   .homeLink{align-self:flex-start;flex:none;background:#fff;color:#22264a;font-weight:900;text-decoration:none;
             border:3px solid #22264a;border-radius:999px;padding:5px 14px;box-shadow:3px 4px 0 #22264a;font-size:15px}
-  @media (max-height:460px){.homeLink{font-size:13px;padding:3px 10px;border-width:2px;margin-bottom:-6px}}
+  .topLinks{align-self:stretch;flex:none;display:flex;justify-content:space-between;gap:10px}
+  button.homeLink{font-family:inherit;cursor:pointer;background:#ffe14d}
+  @media (max-height:460px){.homeLink{font-size:13px;padding:3px 10px;border-width:2px}.topLinks{margin-bottom:-6px}}
 </style>
 </head>
 <body>
@@ -152,7 +161,7 @@
 <div id="count" class="hidden"></div>
 
 <div class="screen" id="menu">
-  <a class="homeLink" href="../">🏠 לאתר של שאול</a>
+  <div class="topLinks"><a class="homeLink" href="../">🏠 לאתר של שאול</a><button class="homeLink" type="button" data-install hidden>📲 התקנה</button></div>
   <div class="title"><img src="shaul.png" alt="שאול הצב"><h1>המרוץ של שאול</h1></div>
   <div class="sub">בוחרים מסלול (במחשב: חצים ו-Enter)! במחשב לוחצים על החצים ⬅️ ➡️ במקלדת, ובטלפון נוגעים בצד ימין או שמאל של המסך, ושאול עובר נתיב. אוספים מטבעות 🪙, עוקפים את החברים ואת סבתא 🦊🐰🐱🐿️👵 ונוסעים על החצים הצבעוניים ⚡ עם המטבעות נפתחים מסלולים חדשים 🔒</div>
   <div class="row" id="modes">
