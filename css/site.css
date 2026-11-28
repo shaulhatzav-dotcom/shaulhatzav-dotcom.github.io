@@ -156,7 +156,9 @@ footer nav .soc a { display: inline-flex; align-items: center; gap: 8px; margin:
   .bar .b { padding: 6px 8px 6px 10px; gap: 6px; } .logo { font-size: 1.2rem; padding-right: 2px; } .logo img { height: 28px; }
   .bar .pill { padding: 7px 12px; font-size: .9rem; }
   .bar .pill.inst { font-size: .9rem; padding: 7px 10px; }
-  @media (max-width: 480px) { .bar .pill.inst .t, .bar .pill.p .t { display: none; } .bar .pill.inst { padding: 5px 9px; } }
+  /* 28/11 (the user: "הכפתור להתקנה בטלפון לא ברור"): a bare 📲 said nothing, so the phone shows the word too; the small sizes make room for it */
+  @media (max-width: 480px) { .bar .b { gap: 4px; padding: 6px 6px 6px 8px; } .bar .pill, .bar .pill.inst, .menu summary { padding: 6px 9px; font-size: .82rem; } .logo { font-size: 1.05rem; gap: 4px; } .logo img { height: 24px; } }
+  @media (max-width: 350px) { .bar .pill.inst .t { display: none; } }
   .hero { padding: 300px 0 46px; min-height: 0; background-position: 62% top; background-size: auto 330px; background-color: var(--teal-d); align-items: flex-end; }
   .hero .panel, .games { margin: 0 auto; }
   .game { min-height: 275px; }
