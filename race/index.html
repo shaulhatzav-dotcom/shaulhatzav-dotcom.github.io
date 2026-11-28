@@ -99,6 +99,15 @@
   .mode{background:#fff;box-shadow:0 5px 0 #b9b4d6;padding:6px 18px;font-size:clamp(17px,2.6vw,22px);opacity:.8}
   .mode.on{background:#ffe14d;box-shadow:0 0 0 4px #fff,0 5px 0 #c9a300;opacity:1}
   #resUnlock{font-size:clamp(20px,3.6vw,30px);font-weight:900;color:#6be675;text-shadow:0 3px 0 #1d3b22}
+  /* the big start button (28/11) */
+  #goBtn{font-size:clamp(30px,6.5vw,52px);padding:12px 46px;border-radius:999px;box-shadow:0 7px 0 #c9a300,0 0 0 5px #fff;animation:goPulse 1.6s ease-in-out infinite}
+  #goBtn:active{transform:translateY(5px);box-shadow:0 2px 0 #c9a300,0 0 0 5px #fff}
+  @keyframes goPulse{50%{transform:scale(1.06)}}
+  #howTo{font-size:clamp(14px,2.2vw,18px);opacity:.9}
+  .pickT{font-weight:900;font-size:clamp(16px,2.6vw,21px);text-shadow:0 2px 0 rgba(0,0,0,.4);margin-bottom:-4px}
+  /* first race: the side arrows pulse until the child steers once */
+  .arrow.hint{animation:arrowHint .7s ease-in-out infinite alternate;background:rgba(255,225,77,.45)}
+  @keyframes arrowHint{to{transform:scale(1.18)}}
   #resTrophy{font-size:clamp(20px,3.6vw,30px);font-weight:900;color:#ffe14d;text-shadow:0 3px 0 #2b2140}
   #resTrophy:not(:empty){animation:pop .5s .3s both}
   /* trophy shelf (28/11): a wooden plank with one cup per track */
@@ -130,6 +139,9 @@
     .card .name{font-size:14px;padding:3px}
     .card .best{font-size:12px}
     .card .lock .need{font-size:12px}
+    #goBtn{font-size:30px;padding:6px 36px}
+    #howTo{font-size:12px}
+    .pickT{font-size:14px}
     #shelf .lbl{font-size:13px;padding:2px 10px;margin-bottom:6px}
     .slot{width:30px} .slot .m{font-size:21px} .slot .t{font-size:10px}
     #slots{border-bottom-width:6px;box-shadow:0 3px 0 #6e4220}
@@ -163,7 +175,10 @@
 <div class="screen" id="menu">
   <div class="topLinks"><a class="homeLink" href="../">🏠 לאתר של שאול</a><button class="homeLink" type="button" data-install hidden>📲 התקנה</button></div>
   <div class="title"><img src="shaul.png" alt="שאול הצב"><h1>המרוץ של שאול</h1></div>
-  <div class="sub">בוחרים מסלול (במחשב: חצים ו-Enter)! במחשב לוחצים על החצים ⬅️ ➡️ במקלדת, ובטלפון נוגעים בצד ימין או שמאל של המסך, ושאול עובר נתיב. אוספים מטבעות 🪙, עוקפים את החברים ואת סבתא 🦊🐰🐱🐿️👵 ונוסעים על החצים הצבעוניים ⚡ עם המטבעות נפתחים מסלולים חדשים 🔒</div>
+  <!-- 28/11: of 13 visitors only 5 started a race. The first screen now leads with ONE big button (no reading needed);
+       the long how-to text became one short line, and the trophy shelf moved under the tracks. -->
+  <button class="btn" id="goBtn">▶ יוצאים!</button>
+  <div class="sub" id="howTo">👆 נוגעים בצד ימין או שמאל של המסך ושאול עובר נתיב (במחשב: החצים ⬅️ ➡️)</div>
   <div class="row" id="modes">
     <div class="pill" id="wallet">🪙 <span id="walletN">0</span> מטבעות</div>
     <div class="row" style="gap:10px"><!-- the two buttons stay together when a phone wraps the row -->
@@ -171,9 +186,10 @@
       <button class="btn mode" data-m="normal" onclick="setMode('normal')">🏁 רגיל</button>
     </div>
   </div>
-  <div id="shelf"><div class="lbl">🏆 מדף הגביעים <span id="shelfN">0/8</span></div><div id="slots"></div></div>
   <div id="rotate" class="hidden">📱↻ עדיף לסובב את הטלפון לרוחב</div>
+  <div class="pickT">או בוחרים מסלול 👇</div>
   <div id="tracks"></div>
+  <div id="shelf"><div class="lbl">🏆 מדף הגביעים <span id="shelfN">0/8</span></div><div id="slots"></div></div>
 </div>
 
 <div class="screen hidden" id="pause">
@@ -1153,7 +1169,12 @@ function initAudio() {
 // audio/<key>.mp3 = ElevenLabs Noa v3 lines (texts in audio/lines.md). A missing file just stays silent.
 // Kids of 3 can't read the toasts, so the important moments are also said out loud.
 const VOICE_KEYS = ['c3', 'c2', 'c1', 'go', 'turbo', 'pass1', 'pass2', 'behind', 'coin1', 'coin2', 'coin3',
-                    'oops', 'splash', 'win', 'near', 'again', 'unlock', 'trophy', 'locked'];
+                    'oops', 'splash', 'win', 'near', 'again', 'unlock', 'trophy', 'locked', 'steer', 'steerKeys'];
+// phone/tablet = touch is the main pointer; a computer gets the keyboard how-to (user 28/11: "זה מבלבל במחשב")
+const TOUCH = matchMedia('(hover: none) and (pointer: coarse)').matches;
+const STEER = TOUCH ? { line: '👆 נוגעים בצד ימין או שמאל של המסך ושאול עובר נתיב', toast: '👆 נוגעים בצד כדי לעבור נתיב', voice: 'steer' }
+                    : { line: '⬅️ ➡️ לוחצים על החצים במקלדת ושאול עובר נתיב', toast: '⬅️ ➡️ לוחצים על החצים במקלדת', voice: 'steerKeys' };
+document.getElementById('howTo').textContent = STEER.line;
 const VOICE = {}, saidAt = {};
 let voiceGain, voiceSrc = null, voiceEnd = 0, voicesLoading = false, sayTimer = 0;
 function loadVoices() {
@@ -1222,9 +1243,12 @@ function musicTick() {
 
 // ---------- toast ----------
 let toastTimer = 0;
-function toast(text) {
+let toastLock = 0;
+function toast(text, hold) {   // hold = seconds this toast stays and other toasts wait (the first-race steering hint)
+  if (!hold && tGlobal < toastLock) return;
   const el = document.getElementById('toast'); el.textContent = text;
-  el.classList.remove('show'); void el.offsetWidth; el.classList.add('show'); toastTimer = 1.4;
+  el.classList.remove('show'); void el.offsetWidth; el.classList.add('show'); toastTimer = hold || 1.4;
+  if (hold) toastLock = tGlobal + hold;
 }
 
 // ---------- update ----------
@@ -1237,7 +1261,8 @@ function update(dt) {
     const el = document.getElementById('count');
     const v = Math.ceil(tcount - 0.8);
     if (v >= 1) { if (el.textContent !== String(v)) { el.textContent = v; el.className = ''; sfx('beep'); say('c' + v, true); } }
-    else if (el.textContent !== 'יוצאים!') { el.textContent = 'יוצאים!'; el.className = 'go'; sfx('go'); say('go', true); state = 'race'; musicStart(T.music); setTimeout(() => el.classList.add('hidden'), 800); }
+    else if (el.textContent !== 'יוצאים!') { el.textContent = 'יוצאים!'; el.className = 'go'; sfx('go'); say('go', true); state = 'race';
+      if (steerHint) setTimeout(() => { if (steerHint && state === 'race') { toast(STEER.toast, 3); say(STEER.voice, true); } }, 900); musicStart(T.music); setTimeout(() => el.classList.add('hidden'), 800); }
   }
 
   const racing = state === 'race' || state === 'finish' || state === 'demo';
@@ -1400,6 +1425,10 @@ function startRace(idx) {
   show('menu', false); show('result', false); show('pause', false); show('hud', true);
   // the arrows show on every device; on a computer they light up when the arrow keys are pressed
   show('arL', true); show('arR', true);
+  // until the child has steered once (ever), the arrows pulse and Noa says how to steer
+  steerHint = !localStorage.getItem('shaulRace.steered');
+  document.getElementById('arL').classList.toggle('hint', steerHint); document.getElementById('arR').classList.toggle('hint', steerHint);
+  localStorage.setItem('shaulRace.last', TRACKS[idx].id);
   menuSel = idx;
   state = 'countdown'; tcount = 3.8;
   const el = document.getElementById('count'); el.textContent = ''; el.className = '';
@@ -1507,6 +1536,10 @@ function buildMenu() {
   });
   markMenuSel();
   document.getElementById('walletN').textContent = coinsTotal();
+  // the big button starts the last track played (if it is open), else the meadow
+  const lastI = TRACKS.findIndex(t => t.id === localStorage.getItem('shaulRace.last'));
+  goIdx = lastI >= 0 && isOpen(TRACKS[lastI]) ? lastI : 0;
+  document.getElementById('goBtn').textContent = '▶ יוצאים! ' + TRACKS[goIdx].emo;
   buildShelf();
   setMode(mode);
   const portrait = innerHeight > innerWidth && matchMedia('(pointer:coarse)').matches;
@@ -1518,6 +1551,10 @@ function steer(dir) {
   if (state !== 'race' && state !== 'countdown') return;
   const nl = clamp(lane + dir, 0, 2);
   if (nl !== lane) { lane = nl; sfx('lane'); }
+  if (steerHint && state === 'race') {
+    steerHint = false; localStorage.setItem('shaulRace.steered', '1'); count('race-steered'); toastLock = 0;
+    document.getElementById('arL').classList.remove('hint'); document.getElementById('arR').classList.remove('hint');
+  }
   const el = document.getElementById(dir < 0 ? 'arL' : 'arR'); el.classList.add('on'); setTimeout(() => el.classList.remove('on'), 150);
 }
 cvs.addEventListener('pointerdown', e => { initAudio(); steer(e.clientX < innerWidth / 2 ? -1 : 1); });
@@ -1551,6 +1588,8 @@ document.getElementById('resumeBtn').addEventListener('click', resumeGame);
 document.getElementById('toMenu1').addEventListener('click', toMenu);
 document.getElementById('toMenu2').addEventListener('click', toMenu);
 document.getElementById('againBtn').addEventListener('click', () => startRace(currentIdx));
+let goIdx = 0, steerHint = false;
+document.getElementById('goBtn').addEventListener('click', () => { initAudio(); count('race-go-btn'); startRace(goIdx); });
 const muteBtn = document.getElementById('muteBtn');
 function setMute(m) { muted = m; localStorage.setItem('shaulRace.muted', m ? '1' : '0'); muteBtn.textContent = m ? '🔇' : '🔊'; if (master) master.gain.value = m ? 0 : 1; }
 muteBtn.addEventListener('click', () => { initAudio(); setMute(!muted); });
@@ -1559,10 +1598,13 @@ document.addEventListener('visibilitychange', () => { if (document.hidden) pause
 
 // ---------- resize + loop ----------
 function resize() {
-  const a = innerWidth / innerHeight;
+  // a page that loads in a background tab can report a 0x0 window: use a normal size until the real one arrives
+  // (28/11: otherwise the sky gradient got NaN and the game never started)
+  const iw = innerWidth || 1280, ih = innerHeight || 720;
+  const a = iw / ih;
   // higher internal resolution = a cleaner, less pixelated picture
   const dpr = Math.min(2, window.devicePixelRatio || 1);
-  H = Math.round(clamp(innerHeight * dpr, 440, 1000)); W = Math.round(H * a);
+  H = Math.round(clamp(ih * dpr, 440, 1000)); W = Math.round(H * a);
   if (W > 1700) { W = 1700; H = Math.round(W / a); }
   if (W < 440) { W = 440; H = Math.round(W / a); }
   PX = H / 200;
