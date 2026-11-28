@@ -114,6 +114,11 @@
        background:#4a4580 center/cover no-repeat;position:relative;opacity:.8;box-shadow:0 4px 0 rgba(0,0,0,.3);font:inherit}
   .drv.emoji{background:#ffb13d;font-size:clamp(28px,5vw,42px);line-height:1;display:flex;align-items:center;justify-content:center}
   .drv.on{border-color:#ffe14d;box-shadow:0 0 0 4px #ffe14d,0 4px 0 rgba(0,0,0,.3);opacity:1;transform:scale(1.12)}
+  .drv.lk{opacity:1;border-color:#b9b6d6}
+  .drv.lk::after{content:'🔒';position:absolute;inset:0;border-radius:50%;background:rgba(20,17,42,.72);display:flex;align-items:center;justify-content:center;font-size:clamp(20px,3.4vw,30px)}
+  .drv.lk span{z-index:1;white-space:nowrap;background:#14112a;color:#ffe14d;font-weight:900;font-size:clamp(11px,1.7vw,14px);border-radius:999px;padding:1px 6px;bottom:-11px;filter:none}
+  .drv.shake{animation:drvShake .35s}
+  @keyframes drvShake{25%{transform:translateX(-5px)}50%{transform:translateX(5px)}75%{transform:translateX(-3px)}}
   .drv span{position:absolute;bottom:-9px;left:50%;transform:translateX(-50%);font-size:clamp(16px,2.6vw,22px);line-height:1;filter:drop-shadow(0 2px 0 rgba(0,0,0,.45))}
   @media (max-height:460px){ .drv{width:40px;height:40px;border-width:3px} .drv span{font-size:15px;bottom:-7px} #drivers .lbl{font-size:14px} #drvRow{gap:8px;padding-bottom:6px} }
   .pickT{font-weight:900;font-size:clamp(16px,2.6vw,21px);text-shadow:0 2px 0 rgba(0,0,0,.4);margin-bottom:-4px}
@@ -425,7 +430,11 @@ function buildSprites() {
   Object.assign(SPR, { jtree: SPR.tree, fern: SPR.bush, jflower: SPR.bush, monkey: SPR.bush, log: SPR.puddle, mud: SPR.puddle,
     house: SPR.cupcake, tower: SPR.lolly, light: SPR.cone, ttree: SPR.tree, blocks: SPR.gumdrop, top: SPR.ball,
     rocket: SPR.lolly, robot: SPR.snowman, crystal: SPR.cane, aplant: SPR.flower, moonrock: SPR.snowpile, crater: SPR.puddle,
-    dino: SPR.tree, cycad: SPR.palm, volcano: SPR.tree2, babydino: SPR.bush, egg: SPR.gumdrop, boulder: SPR.snowpile });
+    dino: SPR.tree, cycad: SPR.palm, volcano: SPR.tree2, babydino: SPR.bush, egg: SPR.gumdrop, boulder: SPR.snowpile,
+    coral: SPR.bush, kelp: SPR.cane, sub: SPR.cupcake, chest: SPR.gumdrop, clam: SPR.snowpile, anchor: SPR.cone,
+    wheel: SPR.tree, carousel: SPR.cupcake, tent: SPR.cupcake, balloons: SPR.lolly, popcorn: SPR.cone, barrel: SPR.snowpile,
+    cactus: SPR.palm, cactus2: SPR.bush, camel: SPR.bush, dtent: SPR.cupcake, drock: SPR.snowpile, tumble: SPR.snowpile,
+    cloudp: SPR.snowpile, rainbow: SPR.cane, balloon: SPR.lolly, ccastle: SPR.cupcake, raincloud: SPR.snowpile, cbump: SPR.snowpile });
   SPR.fox = friendKart('#3a7bff', '#2350b8', '#ff8a1f', 'fox');
   SPR.bunny = friendKart('#a05cff', '#6d36c2', '#f4f1ff', 'bunny');
   SPR.squirrel = friendKart('#3ccf5a', '#24903a', '#b0612c', 'squirrel');
@@ -578,6 +587,51 @@ const TRACKS = [
     layout: [[90, 0, 0], [130, -3, 20], [130, 3, -20], [150, 0, 0], [140, 4, 30], [140, -4, -30], [110, 0, 20], [110, 0, -20], [160, 3, 0], [160, -3, 0], [120, 0, 0], [90, 0, 0]],
     music: { mel: [67, 67, 71, 74, 71, 67, 69, 71, 72, 72, 76, 79, 76, 72, 74, 76, 79, 79, 77, 76, 74, 72, 71, 69, 67, 71, 74, 79, 74, 0, 67, 0], bass: [43, 50, 43, 50, 48, 55, 48, 55, 47, 54, 47, 54, 43, 50, 43, 0], bpm: 150 },
     card: 'linear-gradient(#ffd98a 0 48%,#6f9a2c 48%)', roadCss: '#8d93a0'
+  },
+  // 28/11 the user: 4 more tracks (12 in all), so that the drivers can open in steps of 2 trophies (4, 6, 8, 10, 12)
+  {
+    id: 'ocean', name: 'מתחת למים', emo: '🐠', seed: 99, level: 2, cost: 1600,
+    sky: ['#0b6fa8', '#39c0d8'], sun: '#d9fbff', clouds: '#8fe3f2',
+    far: '#2f9fc0', farCap: null, near: '#46b4c9',
+    grass: ['#f0dba0', '#e8d294'], rumble: ['#ff8a1f', '#3cc6b8'], road: ['#73767e', '#6f727a'], lane: '#ffffff',
+    dots: ['#ff8a1f', '#ffe14d', '#ff5fb0', '#ffffff'],
+    scenery: ['coral', 'kelp', 'sub', 'coral', 'chest', 'kelp'], obstacles: ['clam', 'anchor'], particle: 'bubble',
+    layout: [[90, 0, 0], [130, 2, -20], [130, -2, 20], [140, 3, 0], [120, 0, 30], [120, 0, -30], [150, -4, 0], [150, 4, 20], [110, 0, -20], [160, -3, 0], [130, 2, 0], [90, 0, 0]],
+    music: { mel: [72, 74, 76, 79, 76, 74, 72, 67, 69, 72, 76, 81, 79, 76, 74, 72, 77, 76, 74, 72, 74, 76, 79, 76, 72, 0, 76, 0, 72, 0, 0, 0], bass: [48, 55, 52, 55, 45, 52, 48, 52, 41, 48, 45, 48, 43, 50, 47, 0], bpm: 140 },
+    card: 'linear-gradient(#0b6fa8 0 48%,#f0dba0 48%)', roadCss: '#8d93a0'
+  },
+  {
+    id: 'funpark', name: 'הלונה פארק', emo: '🎡', seed: 111, level: 2, cost: 1900,
+    sky: ['#4cb8ff', '#d6f1ff'], sun: '#fff27a', clouds: '#ffffff',
+    far: '#8fd3a0', farCap: null, near: '#5cc46c',
+    grass: ['#5fc552', '#58bc4b'], rumble: ['#ffffff', '#e8343f'], road: ['#73767e', '#6f727a'], lane: '#ffffff',
+    dots: ['#ff4f5e', '#ffe14d', '#4c8dff', '#b46bff', '#ffffff'],
+    scenery: ['wheel', 'tent', 'balloons', 'carousel', 'balloons', 'tent'], obstacles: ['popcorn', 'barrel'], particle: 'confetti',
+    layout: [[90, 0, 0], [120, 3, 20], [120, -3, -20], [140, 4, 0], [140, -4, 30], [110, 0, -30], [150, 3, 20], [150, -3, -20], [120, 0, 0], [160, 4, 0], [130, -2, 0], [90, 0, 0]],
+    music: { mel: [76, 79, 84, 79, 76, 79, 84, 79, 77, 81, 84, 81, 77, 81, 84, 81, 74, 77, 83, 77, 74, 77, 83, 79, 76, 79, 84, 88, 84, 0, 76, 0], bass: [48, 55, 52, 55, 53, 60, 57, 60, 43, 50, 47, 50, 48, 55, 52, 0], bpm: 160 },
+    card: 'linear-gradient(#4cb8ff 0 48%,#5fc552 48%)', roadCss: '#8d93a0'
+  },
+  {
+    id: 'desert', name: 'המדבר', emo: '🐪', seed: 122, level: 3, cost: 2200,
+    sky: ['#58bdf2', '#ffe9c2'], sun: '#fff27a', clouds: '#fff6e6',
+    far: '#e9bd72', farCap: null, near: '#f0c97f',
+    grass: ['#f2cf86', '#ebc67b'], rumble: ['#ffffff', '#d9772b'], road: ['#73767e', '#6f727a'], lane: '#ffffff',
+    dots: ['#ffe14d', '#ff8a1f', '#3c9a3c'],
+    scenery: ['cactus', 'cactus2', 'camel', 'cactus', 'dtent', 'cactus2', 'palm'], obstacles: ['drock', 'tumble'], particle: 'sand',
+    layout: [[90, 0, 0], [140, -3, 30], [140, 3, -30], [120, 0, 40], [120, 0, -40], [160, 4, 0], [150, -4, 20], [130, 3, -20], [110, 0, 0], [160, -4, 30], [140, 4, -30], [90, 0, 0]],
+    music: { mel: [69, 72, 76, 75, 72, 69, 68, 69, 72, 76, 81, 80, 76, 72, 71, 72, 77, 76, 72, 69, 68, 69, 72, 76, 69, 0, 76, 0, 69, 0, 0, 0], bass: [45, 52, 45, 52, 41, 48, 41, 48, 38, 45, 38, 45, 40, 47, 40, 0], bpm: 145 },
+    card: 'linear-gradient(#58bdf2 0 48%,#f2cf86 48%)', roadCss: '#8d93a0'
+  },
+  {
+    id: 'clouds', name: 'ארץ העננים', emo: '☁️', seed: 133, level: 3, cost: 2500,
+    sky: ['#7fb6ff', '#ffd9ef'], sun: '#fff7c2', clouds: '#ffffff',
+    far: '#f3d6f2', farCap: null, near: '#fbe9fb',
+    grass: ['#fdf1fb', '#f6e6f6'], rumble: ['#ff9ec4', '#8fd6ff'], road: ['#73767e', '#6f727a'], lane: '#ffffff',
+    dots: ['#ff9ec4', '#8fd6ff', '#ffe14d', '#ffffff'],
+    scenery: ['cloudp', 'rainbow', 'balloon', 'cloudp', 'ccastle', 'balloon'], obstacles: ['raincloud', 'cbump'], particle: 'star',
+    layout: [[90, 0, 0], [130, 3, 40], [130, -3, -40], [150, 4, 30], [120, 0, -30], [150, -4, 40], [140, 3, -40], [140, -3, 0], [120, 0, 30], [160, 4, -30], [140, -4, 0], [90, 0, 0]],
+    music: { mel: [79, 76, 72, 76, 79, 84, 83, 79, 77, 74, 71, 74, 77, 81, 79, 77, 76, 72, 69, 72, 76, 81, 79, 76, 74, 77, 79, 83, 84, 0, 79, 0], bass: [48, 55, 52, 55, 43, 50, 47, 50, 45, 52, 48, 52, 43, 50, 55, 0], bpm: 150 },
+    card: 'linear-gradient(#7fb6ff 0 48%,#fdf1fb 48%)', roadCss: '#8d93a0'
   }
 ];
 
@@ -586,7 +640,11 @@ const SIZE = { tree2: 1200, pine2: 1100, tree: 1300, flower: 420, flower2: 420, 
   pine: 1300, snowman: 520, snowpile: 620, cane: 700, lolly: 650, cupcake: 520, gumdrop: 460, star: 330, kart: 430, banana: 400, ramp: 760,
   jtree: 1500, fern: 800, jflower: 700, monkey: 480, log: 560, mud: 640, house: 1100, tower: 1000, light: 700, ttree: 900, blocks: 480, top: 380,
   rocket: 900, robot: 520, crystal: 620, aplant: 450, moonrock: 440, crater: 640,
-  dino: 1700, cycad: 1300, volcano: 1900, babydino: 520, egg: 420, boulder: 480 };
+  dino: 1700, cycad: 1300, volcano: 1900, babydino: 520, egg: 420, boulder: 480,
+  coral: 850, kelp: 560, sub: 900, chest: 620, clam: 500, anchor: 420,
+  wheel: 1900, carousel: 1300, tent: 1300, balloons: 620, popcorn: 380, barrel: 420,
+  cactus: 760, cactus2: 520, camel: 1100, dtent: 1000, drock: 480, tumble: 440,
+  cloudp: 1100, rainbow: 1500, balloon: 900, ccastle: 1300, raincloud: 520, cbump: 560 };
 
 let T = null;          // current theme
 let segments = [], trackLength = 0, finishZ = 0, totalStars = 0;
@@ -819,8 +877,15 @@ let jumpT = 0, spinT = 0, lastRamp = null;
 // 28/11: who drives. Shaul is the default; the friends' karts were already drawn.
 const DRIVERS = [['shaul', 'שאול', '🐢', 0], ['fox', 'השועל', '🦊', 0], ['bunny', 'הארנבת', '🐰', 1], ['cat', 'החתול', '🐱', 0],
   ['squirrel', 'הסנאי', '🐿️', 0], ['grandma', 'סבתא', '👵', 1]].map(([kind, name, emo, fem]) => ({ kind, name, emo, fem }));
+// 28/11 the user: the drivers are not all open at the start. Trophies on the shelf (places 1-3, one per track) open them one by one.
+const DRIVER_NEED = { shaul: 0, fox: 4, bunny: 6, cat: 8, squirrel: 10, grandma: 12 };   // the user 28/11: steps of 2 from 4. 10 and 12 need the 4 extra tracks (12 in all)
+DRIVERS.forEach(d => d.need = DRIVER_NEED[d.kind]);
+function cupsN() { let n = 0; for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k.startsWith('shaulRace.trophy.') && +localStorage.getItem(k) > 0) n++; } return n; }
+// 28/11 the user: on 'easy' only Shaul drives; the friends open (by trophies) only on 'normal'
+const easyNow = () => { try { return mode === 'easy'; } catch (e) { return false; } };   // 'mode' is declared further down
+const drvOpen = d => !d.need || (!easyNow() && cupsN() >= d.need);
 let driver = localStorage.getItem('shaulRace.driver');
-if (!DRIVERS.some(d => d.kind === driver)) driver = 'shaul';
+if (!DRIVERS.some(d => d.kind === driver && drvOpen(d))) driver = 'shaul';
 const me = () => DRIVERS.find(d => d.kind === driver);
 // 28/11: the turbo looks different on every track ("super powers")
 const BOOST = {
@@ -831,7 +896,11 @@ const BOOST = {
   jungle: { name: "טורבו ג'ונגל! 🍃", f: ['#ff8a1f', '#ffe14d'], body: '#2f8f3a', p: ['#5cc46c', '#9be05a', '#ffe14d'] },
   toycity: { name: 'טורבו צעצועים! 🧸', f: ['#ff4f5e', '#ffe14d'], body: '#4c8dff', p: ['#ff4f5e', '#ffe14d', '#4c8dff', '#6be675'] },
   space: { name: 'טורבו חלל! 🚀', f: ['#a77bff', '#4cc3ff'], body: '#f4f4f4', p: ['#ffe14d', '#ffffff', '#a9d8ff'] },
-  dino: { name: 'טורבו דינו! 🦖', f: ['#ff4f1f', '#ffe14d'], body: '#6f9a2c', p: ['#ff8a1f', '#ffe14d', '#ff4f1f'] }
+  dino: { name: 'טורבו דינו! 🦖', f: ['#ff4f1f', '#ffe14d'], body: '#6f9a2c', p: ['#ff8a1f', '#ffe14d', '#ff4f1f'] },
+  ocean: { name: 'טורבו צוללת! 🫧', f: ['#39c0d8', '#ffffff'], body: '#ffcf1f', p: ['#ffffff', '#bfe6ff', '#8fd6ff'], ring: true },
+  funpark: { name: 'טורבו זיקוקים! 🎆', f: ['#ff4f5e', '#ffe14d'], body: '#b46bff', p: ['#ff4f5e', '#ffe14d', '#4c8dff', '#6be675', '#b46bff'] },
+  desert: { name: 'טורבו סופת חול! 🌪️', f: ['#ff8a1f', '#ffe9a8'], body: '#d9772b', p: ['#ffe9a8', '#f2c879', '#ffffff'] },
+  clouds: { name: 'טורבו קשת בענן! 🌈', f: ['#ff9ec4', '#8fd6ff'], body: '#ffffff', p: ['#ff4f5e', '#ffb13d', '#ffe14d', '#6be675', '#4cc3ff', '#a77bff'] }
 };
 
 function resetRace() {
@@ -1156,14 +1225,16 @@ function drawFrontTreads(g, im, dw, dh) {
 const OBJ_NAMES = ['tree', 'tree2', 'bush', 'flower', 'flower2', 'puddle', 'cone', 'palm', 'umbrella', 'castle', 'ball',
   'pine', 'pine2', 'snowman', 'snowpile', 'cane', 'lolly', 'cupcake', 'gumdrop',
   'jtree', 'fern', 'jflower', 'monkey', 'log', 'mud', 'house', 'tower', 'light', 'ttree', 'blocks', 'top',
-  'rocket', 'robot', 'crystal', 'aplant', 'moonrock', 'crater', 'dino', 'cycad', 'volcano', 'babydino', 'egg', 'boulder'];
+  'rocket', 'robot', 'crystal', 'aplant', 'moonrock', 'crater', 'dino', 'cycad', 'volcano', 'babydino', 'egg', 'boulder',
+  'coral', 'kelp', 'sub', 'chest', 'clam', 'anchor', 'wheel', 'carousel', 'tent', 'balloons', 'popcorn', 'barrel',
+  'cactus', 'cactus2', 'camel', 'dtent', 'drock', 'tumble', 'cloudp', 'rainbow', 'balloon', 'ccastle', 'raincloud', 'cbump'];
 for (const n of OBJ_NAMES) {
   const im = new Image();
   im.onload = () => { SPR[n] = im; };
   im.src = 'obj/' + n + '.png';
 }
 // 3D panorama per track (bg/<id>.jpg); PANO_HORIZON = where its ground starts, as a fraction of its height
-const PANO = {}, PANO_HORIZON = { meadow: 0.67, beach: 0.41, snow: 0.56, candy: 0.6, jungle: 0.5, toycity: 0.56, space: 0.47, dino: 0.5 };
+const PANO = {}, PANO_HORIZON = { meadow: 0.67, beach: 0.41, snow: 0.56, candy: 0.6, jungle: 0.5, toycity: 0.56, space: 0.47, dino: 0.5, ocean: 0.505, funpark: 0.503, desert: 0.506, clouds: 0.5 };
 for (const t of TRACKS.map(t => t.id)) {
   const im = new Image();
   im.onload = () => { PANO[t] = im; if (T && T.id === t) makeLayers(); };
@@ -1251,7 +1322,7 @@ function ambient(dt) {
   if (!T.particle || state === 'menu') return;
   const rate = T.particle === 'snow' ? 40 : 10;
   if (Math.random() < rate * dt) {
-    const c = T.particle === 'snow' ? ['#ffffff'] : T.particle === 'petal' ? ['#ff9ec4', '#ffffff', '#ffe14d'] : T.particle === 'leaf' ? ['#5cc46c', '#9be05a', '#2f8f3a'] : T.particle === 'star' ? ['#ffe14d', '#ffffff', '#a9d8ff'] : ['#ff4f5e', '#ffe14d', '#6be675', '#4cc3ff', '#ffffff'];
+    const c = T.particle === 'bubble' ? ['#ffffff', '#bfe6ff', '#8fd6ff'] : T.particle === 'sand' ? ['#ffe9a8', '#f2c879'] : T.particle === 'snow' ? ['#ffffff'] : T.particle === 'petal' ? ['#ff9ec4', '#ffffff', '#ffe14d'] : T.particle === 'leaf' ? ['#5cc46c', '#9be05a', '#2f8f3a'] : T.particle === 'star' ? ['#ffe14d', '#ffffff', '#a9d8ff'] : ['#ff4f5e', '#ffe14d', '#6be675', '#4cc3ff', '#ffffff'];
     particles.push({ x: Math.random() * W, y: -3, vx: (-10 + Math.random() * 20) * PX, vy: (18 + Math.random() * 18) * PX, g: 0, life: 6, t: 0, c: c[Math.floor(Math.random() * c.length)], s: (T.particle === 'snow' ? 1 + (Math.random() < 0.3) : 1) * PX, sway: true });
   }
 }
@@ -1606,6 +1677,11 @@ let mode = 'normal';
 function setMode(m) {
   mode = m;
   document.querySelectorAll('#modes .mode').forEach(b => b.classList.toggle('on', b.dataset.m === m));
+  // easy: back to Shaul (the saved choice is kept and returns on 'normal', if that driver is open)
+  const saved = DRIVERS.find(d => d.kind === localStorage.getItem('shaulRace.driver'));
+  const want = saved && drvOpen(saved) ? saved.kind : 'shaul';
+  if (want !== driver) { driver = want; if (state === 'demo') { buildTrack(TRACKS[currentIdx]); resetRace(); speed = MAXSPEED * 0.5; } }
+  buildDrivers();
 }
 const coinsTotal = () => +(localStorage.getItem('shaulRace.coins') || 0);
 // 28/11 the user: a trophy for every track (gold 1st, silver 2nd, bronze 3rd), shown on a shelf in the menu
@@ -1625,7 +1701,7 @@ function showResult() {
   const lossKey = 'shaulRace.losses.' + T.id;
   localStorage.setItem(lossKey, place === 1 ? 0 : +(localStorage.getItem(lossKey) || 0) + 1);
   // trophy shelf: places 1-3 put a cup on the shelf; a better place replaces it
-  const had = trophyOf(T), newTrophy = place <= 3 && (!had || place < had);
+  const had = trophyOf(T), newTrophy = place <= 3 && (!had || place < had), cupsBefore = cupsN();
   if (newTrophy) { localStorage.setItem('shaulRace.trophy.' + T.id, place); count('race-trophy-' + T.id); }
   document.getElementById('resTrophy').textContent = newTrophy
     ? MEDAL[place] + ' ' + TROPHY_NAME[place] + ' למדף! (' + shelfCount() + ' מתוך ' + TRACKS.length + ')' : '';
@@ -1641,10 +1717,15 @@ function showResult() {
     ? '🪙 ' + me().name + (me().fem ? ' אספה ' : ' אסף ') + starN + ' מטבעות!' + (best > starN ? '  (השיא: ' + best + ')' : '')
     : 'בפעם הבאה נאסוף מטבעות 🪙') + '  ·  בקופה: ' + coinsTotal();
   const next = TRACKS.find(t => !isOpen(t));
-  document.getElementById('resUnlock').textContent = justUnlocked.length
+  const newDrv = easyNow() ? [] : DRIVERS.filter(d => d.need > cupsBefore && d.need <= cupsN()), nextDrv = easyNow() ? null : DRIVERS.find(d => !drvOpen(d));
+  if (newDrv.length) count('race-driver-open-' + newDrv[0].kind);
+  document.getElementById('resUnlock').textContent = newDrv.length
+    ? '🎉 נהג חדש נפתח: ' + newDrv.map(d => d.emo + ' ' + d.name).join(', ') + '!' + (justUnlocked.length ? '  ·  מסלול חדש: ' + justUnlocked.map(t => t.emo + ' ' + t.name).join(', ') + '!' : '')
+    : justUnlocked.length
     ? '🎉 נפתח מסלול חדש: ' + justUnlocked.map(t => t.emo + ' ' + t.name).join(', ') + '!'
+    : newTrophy && nextDrv ? '🔒 עוד ' + (nextDrv.need - cupsN() === 1 ? 'גביע אחד' : (nextDrv.need - cupsN()) + ' גביעים') + ' ונפתח ' + nextDrv.emo + ' ' + nextDrv.name
     : next ? '🔒 עוד ' + (next.cost - coinsTotal()) + ' מטבעות ונפתח ' + next.emo + ' ' + next.name : '';
-  if (justUnlocked.length) { sfx('fanfare'); confetti(40); }
+  if (justUnlocked.length || newDrv.length) { sfx('fanfare'); confetti(40); }
   show('result', true); show('hud', false); show('arL', false); show('arR', false);
 }
 function toMenu() {
@@ -1667,13 +1748,23 @@ function resumeGame() {
 function buildDrivers() {
   const box = document.getElementById('drvRow'); box.innerHTML = '';
   DRIVERS.forEach(d => {
-    const b = document.createElement('button'); b.className = 'drv' + (d.kind === driver ? ' on' : ''); b.title = d.name;
+    const open = drvOpen(d);
+    const b = document.createElement('button'); b.className = 'drv' + (d.kind === driver ? ' on' : '') + (open ? '' : ' lk'); b.title = d.name;
+    if (!open) b.innerHTML = '<span>🏆 ' + d.need + '</span>';
     // faces, not backs (user 28/11): faces/<kind>.jpg are cut from the cast picture (art-options/make_faces.py).
     // The cat's face was generated on fal (art-options/face-cat.png), since the cast picture has no cat.
     b.style.backgroundImage = `url(${d.kind === 'shaul' ? 'shaul.png' : 'faces/' + d.kind + '.jpg'})`;
-    b.addEventListener('click', () => setDriver(d.kind));
+    b.addEventListener('click', () => open ? setDriver(d.kind) : lockedDriver(d, b));
     box.appendChild(b);
   });
+}
+// a closed driver: shake the button and say how many trophies are still missing
+function lockedDriver(d, b) {
+  initAudio(); sfx('bump');
+  b.classList.remove('shake'); void b.offsetWidth; b.classList.add('shake');
+  const miss = d.need - cupsN();
+  if (easyNow()) return toast(miss > 0 ? '🔒 ' + d.name + ': רק במצב רגיל 🏁, עם ' + d.need + ' גביעים 🏆' : '🔒 ' + d.name + ': רק במצב רגיל 🏁');
+  toast('🔒 ' + d.name + (miss === 1 ? ': צריך עוד גביע אחד 🏆' : ': צריך עוד ' + miss + ' גביעים 🏆'));
 }
 function setDriver(k) {
   initAudio(); sfx('lane');
@@ -1766,8 +1857,8 @@ function menuKey(left, right, up, down, enter) {
     if (kRow === 'go') kRow = 'trk';                                    // as before: sideways arrows choose a track
     if (kRow === 'trk') menuSel = clamp(menuSel + dir, 0, n - 1);
     else if (kRow === 'drv') {
-      const i = clamp(DRIVERS.findIndex(d => d.kind === driver) + dir, 0, DRIVERS.length - 1);
-      if (DRIVERS[i].kind !== driver) setDriver(DRIVERS[i].kind);
+      const od = DRIVERS.filter(drvOpen), i = clamp(od.findIndex(d => d.kind === driver) + dir, 0, od.length - 1);   // closed drivers are skipped
+      if (od[i].kind !== driver) setDriver(od[i].kind);
     } else if (kRow === 'mode') { sfx('lane'); setMode(dir > 0 ? 'normal' : 'easy'); }
   } else if (enter) {
     if (kRow === 'trk') return tryStart(menuSel);
