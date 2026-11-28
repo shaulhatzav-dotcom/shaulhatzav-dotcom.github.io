@@ -612,7 +612,7 @@ const TRACKS = [
     card: 'linear-gradient(#4cb8ff 0 48%,#5fc552 48%)', roadCss: '#8d93a0'
   },
   {
-    id: 'desert', name: 'המדבר', emo: '🐪', seed: 122, level: 3, cost: 2200,
+    id: 'desert', name: 'המדבר', emo: '🐪', seed: 122, level: 2, cost: 2200,
     sky: ['#58bdf2', '#ffe9c2'], sun: '#fff27a', clouds: '#fff6e6',
     far: '#e9bd72', farCap: null, near: '#f0c97f',
     grass: ['#f2cf86', '#ebc67b'], rumble: ['#ffffff', '#d9772b'], road: ['#73767e', '#6f727a'], lane: '#ffffff',
@@ -623,7 +623,7 @@ const TRACKS = [
     card: 'linear-gradient(#58bdf2 0 48%,#f2cf86 48%)', roadCss: '#8d93a0'
   },
   {
-    id: 'clouds', name: 'ארץ העננים', emo: '☁️', seed: 133, level: 3, cost: 2500,
+    id: 'clouds', name: 'ארץ העננים', emo: '☁️', seed: 133, level: 2, cost: 2500,
     sky: ['#7fb6ff', '#ffd9ef'], sun: '#fff7c2', clouds: '#ffffff',
     far: '#f3d6f2', farCap: null, near: '#fbe9fb',
     grass: ['#fdf1fb', '#f6e6f6'], rumble: ['#ff9ec4', '#8fd6ff'], road: ['#73767e', '#6f727a'], lane: '#ffffff',
@@ -728,6 +728,24 @@ function buildTrack(theme) {
       for (let k = 0; k < 4; k++) segments[n + k].items.push({ type: 'boost', x: LANES[l], g: group, k });
       n += 34;
     }
+  }
+
+  // 28/11 night, the user: "some tracks are hard to win, there is not enough turbo". The random stream gave some tracks
+  // only 4-6 pads with gaps of half a lap. Now there is a turbo pad at least every TURBO_GAP segments on every track
+  // (its own random numbers, so everything else stays where it was). The pad clears its lane and any obstacle next to it.
+  const TURBO_GAP = 330, br = rngFrom(theme.seed + 2000);
+  for (let i = 40, lastB = 40; i < finishSeg - 40; i++) {
+    if (segments[i].items.some(it => it.type === 'boost')) { lastB = i; continue; }
+    if (i - lastB < TURBO_GAP) continue;
+    const l = Math.floor(br() * 3);
+    for (let q = i - 10; q <= i + 8; q++) segments[q].items = segments[q].items.filter(it => {
+      const out = it.type === 'obstacle' || Math.abs(it.x - LANES[l]) < 0.1;
+      if (out && it.type === 'star') totalStars--;
+      return !out;
+    });
+    group++;
+    for (let k = 0; k < 4; k++) segments[i + k].items.push({ type: 'boost', x: LANES[l], g: group, k });
+    lastB = i + 3; i += 3;
   }
 
   // jump ramps (28/11): a second pass with its own random numbers, in stretches of road with nothing on them.
